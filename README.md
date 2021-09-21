@@ -93,7 +93,7 @@ class PostsController < ApplicationController
         # result => <Post:>
       end
       
-      # in case
+      # in case ::params or any other dry-validation fails.
       match.failure :validation_error do |result|
         # result => [:validation_error, ['validation_error', { thread_id: 'is missing' }]
       end
@@ -108,7 +108,7 @@ class PostsController < ApplicationController
         # result => [:unauthorized, ['unauthorized', 'User is not active']
       end
       
-      # in case any of the ::authorize blocks returns false
+      # in case #create_post returns a Failure
       match.failure :failed_to_save do |result|
         # result => [:failed_to_save, ['failed_to_save', { user_id: 'some error' }]
       end      
