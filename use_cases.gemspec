@@ -31,8 +31,8 @@ Gem::Specification.new do |spec|
   # guide at: https://bundler.io/guides/creating_gem.html
 
   spec.add_dependency "activesupport", "~> 5.2.6"
-  spec.add_dependency "dry-events", "~> 0.3.0"
-  spec.add_dependency "dry-matcher", "~> 0.9.0"
-  spec.add_dependency "dry-monads", "~> 1.4"
-  spec.add_dependency "dry-validation", "~> 1.7.0"
+  spec.add_dependency "dry-events", ">= 0.3.0"
+  spec.add_dependency "dry-matcher", ">= 0.9.0"
+  spec.add_dependency "dry-monads", ">= 1.4"
+  spec.add_dependency "dry-validation", ">= 1.6.0"
 end

@@ -6,10 +6,11 @@ source "https://rubygems.org"
 gemspec
 
 gem "activesupport", "~> 5.2.6"
-gem "dry-events", "~> 0.3.0"
-gem "dry-matcher", "~> 0.9.0"
-gem "dry-monads", "~> 1.4"
-gem "dry-validation", "~> 1.7.0"
+
+gem "dry-events", ">= 0.3.0"
+gem "dry-matcher", ">= 0.9.0"
+gem "dry-monads", ">= 1.4"
+gem "dry-validation", ">= 1.7.0"
 
 gem "byebug"
 gem "rake", "~> 13.0"
