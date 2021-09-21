@@ -1,4 +1,4 @@
-require 'byebug'
+require "byebug"
 
 module UseCases
   module Notifications
@@ -36,7 +36,7 @@ module UseCases
       end
 
       def event_predicate
-        predicate = event_id.to_s.gsub(step_name.to_s, '')
+        predicate = event_id.to_s.gsub(step_name.to_s, "")
 
         "step#{predicate}".to_sym
       end

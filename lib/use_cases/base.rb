@@ -1,19 +1,19 @@
-require 'dry/monads'
-require 'dry/events'
-require 'dry/monads/do'
-require 'dry/monads/do/all'
-require 'dry/matcher/result_matcher'
-require 'active_support/hash_with_indifferent_access'
+require "dry/monads"
+require "dry/events"
+require "dry/monads/do"
+require "dry/monads/do/all"
+require "dry/matcher/result_matcher"
+require "active_support/hash_with_indifferent_access"
 
-require 'use_cases/authorize'
-require 'use_cases/dsl'
-require 'use_cases/errors'
-require 'use_cases/steps'
-require 'use_cases/validate'
-require 'use_cases/stack'
-require 'use_cases/stack_runner'
-require 'use_cases/step_result'
-require 'use_cases/notifications'
+require "use_cases/authorize"
+require "use_cases/dsl"
+require "use_cases/errors"
+require "use_cases/steps"
+require "use_cases/validate"
+require "use_cases/stack"
+require "use_cases/stack_runner"
+require "use_cases/step_result"
+require "use_cases/notifications"
 
 module UseCases
   class Base
@@ -29,7 +29,7 @@ module UseCases
 
         include UseCases::Notifications
         include UseCases::Validate
-        include UseCases::Authorize        
+        include UseCases::Authorize
       end
     end
 
@@ -54,6 +54,6 @@ module UseCases
       else
         ActiveSupport::HashWithIndifferentAccess.new(params)
       end
-    end    
+    end
   end
 end

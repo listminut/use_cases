@@ -23,12 +23,11 @@ module UseCases
       expected_args_count = step.args_count
       step_args = _assert_step_arguments_with_count(stack, args)
 
-      if step.missing?
-        raise MissingStepError, "Missing ##{step.name} implementation."
-      end
+      raise MissingStepError, "Missing ##{step.name} implementation." if step.missing?
 
       if expected_args_count != step_args.count
-        raise StepArgumentError, "##{step.name} expects #{expected_args_count} arguments it only received #{step_args.count}, make sure your previous step Success() statement has a payload."
+        raise StepArgumentError,
+              "##{step.name} expects #{expected_args_count} arguments it only received #{step_args.count}, make sure your previous step Success() statement has a payload."
       end
 
       step.call(*step_args)

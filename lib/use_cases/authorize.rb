@@ -10,7 +10,7 @@ module UseCases
     end
 
     module DSL
-      def authorize(message_str_or_proc = 'User unauthorized', &blk)
+      def authorize(message_str_or_proc = "User unauthorized", &blk)
         _define_authorize_step(message_str_or_proc, &blk)
 
         step(next_authorize_step_name)
@@ -30,7 +30,8 @@ module UseCases
     private
 
     def authorize(*)
-      raise NoAuthorizationError, 'Make sure to define at least one *authorize* block for your use case (e.g. use `authorize { true }` to allow all users).'
+      raise NoAuthorizationError,
+            "Make sure to define at least one *authorize* block for your use case (e.g. use `authorize { true }` to allow all users)."
     end
 
     module ClassMethods

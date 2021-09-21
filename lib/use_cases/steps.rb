@@ -1,5 +1,5 @@
-require 'dry/monads/all'
-require 'byebug'
+require "dry/monads/all"
+require "byebug"
 
 module UseCases
   module Steps
@@ -16,9 +16,7 @@ module UseCases
 
       include Dry::Monads[:result]
 
-      attr_reader :name
-
-      attr_reader :object, :external, :failure, :options
+      attr_reader :name, :object, :external, :failure, :options
 
       def initialize(name, *args, **options)
         @name = name

@@ -46,9 +46,7 @@ module UseCases
     private
 
     def validate(params, current_user)
-      if !params.respond_to?(:merge)
-        return Failure([:validation_error, '*params* must be a hash.'])
-      end
+      return Failure([:validation_error, "*params* must be a hash."]) unless params.respond_to?(:merge)
 
       validation = contract.call(params.merge(current_user: current_user))
 
@@ -57,7 +55,9 @@ module UseCases
 
     def contract
       return self.class._contract_class.new if self.class._contract_class_defined?
-      raise NoValidationError, 'Make sure to define params validations by using *params*, *schema*, *json*, *rule* or *option* macros in your use case.'
+
+      raise NoValidationError,
+            "Make sure to define params validations by using *params*, *schema*, *json*, *rule* or *option* macros in your use case."
     end
 
     module ClassMethods
@@ -78,7 +78,7 @@ module UseCases
       end
 
       def _contract_class_name
-        "#{self.name}::Contract"
+        "#{name}::Contract"
       end
 
       def _contract_class_defined?
