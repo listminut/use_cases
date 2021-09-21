@@ -12,7 +12,7 @@ class AuthorizeTestUseCase < UseCases::Base
   private
 
   def load_something_necessary_for_authorize
-    Success("resource loaded before authorizing")
+    "resource loaded before authorizing"
   end
 
   def run_something_after_authorizing(resource_loaded_before_authorizing)
