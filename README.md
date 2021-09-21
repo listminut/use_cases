@@ -30,9 +30,17 @@ Or install it yourself as:
 
 To fully understand `UseCases`, make sure to read [dry-transaction](https://dry-rb.org/gems/dry-transaction/0.13/)'s documentation first.
 
-### Available DSL methods
+### Validations
 
+See [dry-validation](https://dry-rb.org/gems/dry-validation/)
 
+### Step Adapters
+
+https://dry-rb.org/gems/dry-transaction/0.13/step-adapters/
+
+### Authorization
+
+`authorize` is a `check` step that returns an `:unauthorized` code in it's `Failure`.
 
 ### Example
 

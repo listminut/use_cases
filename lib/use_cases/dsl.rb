@@ -1,5 +1,11 @@
 # frozen_string_literal: true
 
+require "use_cases/steps/step"
+require "use_cases/steps/map"
+require "use_cases/steps/tee"
+require "use_cases/steps/try"
+require "use_cases/steps/check"
+
 module UseCases
   module DSL
     def step(name, options = {})
@@ -16,6 +22,10 @@ module UseCases
 
     def try(name, options = {})
       __steps__ << Steps::Try.new(name, nil, options)
+    end
+
+    def check(name, options = {})
+      __steps__ << Steps::Check.new(name, nil, options)
     end
 
     def __steps__

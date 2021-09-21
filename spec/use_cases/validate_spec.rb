@@ -1,15 +1,9 @@
 # frozen_string_literal: true
 
 require "spec_helper"
+require "support/validate_test_use_case"
 
 RSpec.describe UseCases::Validate do
-  class ValidateTestUseCase < UseCases::Base
-    params do
-      required(:required_string_param).filled(:string)
-      required(:value_checked_param).value(eql?: "some string")
-    end
-  end
-
   subject { ValidateTestUseCase.new }
 
   let(:user) { double("user") }

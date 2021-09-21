@@ -1,22 +1,9 @@
 # frozen_string_literal: true
 
 require "spec_helper"
+require "support/step_test_use_case"
 
 RSpec.describe UseCases::Steps::Step do
-  class StepTestUseCase < UseCases::Base
-    params {}
-
-    step :do_something
-
-    step :do_something_after
-
-    def do_something(params, user); end
-
-    def do_something_after(prev_result)
-      Success("previous message: #{prev_result}")
-    end
-  end
-
   subject { StepTestUseCase.new }
 
   let(:user) { double("user") }

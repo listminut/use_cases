@@ -1,22 +1,9 @@
 # frozen_string_literal: true
 
 require "spec_helper"
+require "support/try_test_use_case"
 
 RSpec.describe UseCases::Steps::Try do
-  class TryTestUseCase < UseCases::Base
-    params {}
-
-    try :do_something, failure: :failed_with_an_error
-
-    step :do_something_after
-
-    def do_something(params, user); end
-
-    def do_something_after(prev_result)
-      Success("previous message: #{prev_result}")
-    end
-  end
-
   subject { TryTestUseCase.new }
 
   let(:user) { double("user") }
@@ -26,9 +13,9 @@ RSpec.describe UseCases::Steps::Try do
     allow(user).to receive(:admin?).and_return(true)
   end
 
-  context "when the try method raises an error" do
+  context "when the try method raises the catched error" do
     before do
-      allow(subject).to receive(:do_something).and_raise(StandardError, "some error")
+      allow(subject).to receive(:do_something).and_raise(TryTestUseCase::SomeError, "some error")
     end
 
     it "fails" do
@@ -61,6 +48,16 @@ RSpec.describe UseCases::Steps::Try do
       end
 
       expect(result).to eq "some error"
+    end
+  end
+
+  context "when the try method raises another error" do
+    before do
+      allow(subject).to receive(:do_something).and_raise(StandardError, "some error")
+    end
+
+    it "fails" do
+      expect { subject.call(params, user) {} }.to raise_error StandardError
     end
   end
 

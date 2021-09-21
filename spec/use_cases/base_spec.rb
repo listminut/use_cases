@@ -1,33 +1,10 @@
 # frozen_string_literal: true
 
 require "spec_helper"
+require "support/base_test_use_case"
 
 RSpec.describe UseCases::Base do
-  class BaseUseCase < UseCases::Base
-    params do
-      required(:required_string_param).filled(:string)
-      required(:type_checked_param).value(:string)
-    end
-
-    step :do_something
-
-    try :do_something_else
-
-    authorize do |user, _params, _do_something_else_result|
-      user.admin?
-    end
-
-    private
-
-    def do_something(validation_result, params, user); end
-
-    def do_something_else(do_something_result, params, user); end
-  end
-
-  subject { BaseUseCase.new }
-
-  describe "::ancestors" do
-  end
+  subject { BaseTestUseCase.new }
 
   describe "#stack" do
     it "has all the defined steps" do

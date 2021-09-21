@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "dry/monads/all"
-require "byebug"
 
 module UseCases
   module Steps
@@ -11,6 +10,7 @@ module UseCases
       include Dry::Events::Publisher[name || object_id]
 
       def self.inherited(subclass)
+        super
         subclass.register_event(:step)
         subclass.register_event(:step_succeeded)
         subclass.register_event(:step_failed)
@@ -24,8 +24,10 @@ module UseCases
         @name = name
         @object = args.first
         @options = options
-        @external = options[:with]
-        @failure = options[:failure]
+      end
+
+      def previous_step_result
+        object.stack.prev_step_result
       end
 
       def call(*args)
@@ -33,7 +35,7 @@ module UseCases
       end
 
       def do_call(*args)
-        external ? object.call(*args) : object.send(name, *args)
+        options[:with] ? object.call(*args) : object.send(name, *args)
       end
 
       def publish_events(args)
@@ -65,28 +67,31 @@ module UseCases
       end
     end
 
-    class Step < Abstract; end
-
-    class Map < Abstract; end
+    class Map < Abstract
+      def call(*args)
+        Success(super(*args))
+      end
+    end
 
     class Try < Abstract
       def do_call(*args)
         Success(super(*args))
-      rescue StandardError => e
-        Failure([failure, e.message])
+      rescue options[:catch] || StandardError => e
+        Failure([options[:failure], e.message])
       end
     end
 
-    class LoadResource < Try
-      def intitialize(*args)
-        super(*args)
-        @failure = :not_found
+    class Check < Abstract
+      def do_call(*args)
+        result = super(*args)
+        result ? Success(result) : Failure([options[:failure], result])
       end
     end
 
     class Tee < Abstract
-      def call(*args)
-        Success(super(*args))
+      def do_call(*args)
+        super(*args)
+        Success(previous_step_result.value)
       end
     end
   end

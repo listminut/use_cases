@@ -10,11 +10,13 @@ module UseCases
     end
 
     def value
-      if result.is_a?(Dry::Monads::Result::Success) && result.respond_to?(:value!) && result.value! == Dry::Monads::Unit
+      return result unless result.respond_to?(:value!)
+
+      if result.is_a?(Dry::Monads::Result::Success) && result.value! == Dry::Monads::Unit
         nil
       elsif result.is_a?(Dry::Monads::Result::Success)
         result.value!
-      elsif !result.is_a?(Dry::Monads::Result::Failure) && result.respond_to?(:value!) && result.value! == Dry::Monads::Unit
+      elsif !result.is_a?(Dry::Monads::Result::Failure) && result.value! == Dry::Monads::Unit
         nil
       else
         result
@@ -26,8 +28,6 @@ module UseCases
     end
 
     def failure?
-      return false if step.is_a?(Steps::Tee)
-
       value.is_a?(Dry::Monads::Result::Failure)
     end
 
