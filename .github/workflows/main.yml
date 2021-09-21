@@ -12,9 +12,5 @@ jobs:
         with:
           ruby-version: 2.6.8
           bundler-cache: true
-  test:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
       - name: Run tests
         run: bundle exec rake
