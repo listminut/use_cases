@@ -5,9 +5,14 @@ require "use_cases/steps/abstract"
 module UseCases
   module Steps
     class Tee < Abstract
+      class InvalidReturnValue < StandardError; end
+
       def do_call(*args)
         super(*args)
-        Success(previous_step_result.value)
+        result = previous_step_result.value
+        raise InvalidReturnValue, "The return value should not be a Monad." if result.is_a?(Dry::Monads::Result)
+
+        Success(result)
       end
     end
   end
