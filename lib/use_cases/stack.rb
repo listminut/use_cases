@@ -12,6 +12,7 @@ module UseCases
 
     def bind(object)
       steps.map! { |step| step.bind(object) }
+      self
     end
 
     def call(initial_value = nil)

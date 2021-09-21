@@ -37,9 +37,5 @@ module UseCases
             "Make sure to define at least one *authorize* block" \
             "for your use case (e.g. use `authorize { true }` to allow all users)."
     end
-
-    def _resolve_message(message, *args)
-      message.is_a?(String) ? message : message.call(*args)
-    end
   end
 end

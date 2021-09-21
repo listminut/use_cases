@@ -1,31 +1,17 @@
 # frozen_string_literal: true
 
-require "use_cases/steps/step"
-require "use_cases/steps/map"
-require "use_cases/steps/tee"
-require "use_cases/steps/try"
-require "use_cases/steps/check"
+require "active_support/inflector/methods"
 
 module UseCases
   module DSL
-    def step(name, options = {})
-      __steps__ << Steps::Step.new(name, nil, options)
-    end
+    include ActiveSupport::Inflector
 
-    def map(name, options = {})
-      __steps__ << Steps::Map.new(name, nil, options)
-    end
+    def register_adapter(step_class)
+      step_name = underscore(demodulize(step_class.name))
 
-    def tee(name, options = {})
-      __steps__ << Steps::Tee.new(name, nil, options)
-    end
-
-    def try(name, options = {})
-      __steps__ << Steps::Try.new(name, nil, options)
-    end
-
-    def check(name, options = {})
-      __steps__ << Steps::Check.new(name, nil, options)
+      define_singleton_method(step_name) do |name, options = {}|
+        __steps__ << step_class.new(name, nil, options)
+      end
     end
 
     def __steps__
