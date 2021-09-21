@@ -6,9 +6,10 @@ module UseCases
       def do_call(*args)
         args = [object.class.name, name.to_s, *args]
         args = serialize_step_arguments(args)
-        queue = options[:queue] || :default
 
-        ProcessStepJob.set(queue: queue).perform_later(*args)
+        job_options = options.slice(:queue, :wait, :wait_until, :priority)
+
+        ProcessStepJob.set(job_options).perform_later(*args)
       end
 
       def serialize_step_arguments(args)
