@@ -28,10 +28,47 @@ Or install it yourself as:
 
 ## Usage
 
-Like [dry-transaction](https://dry-rb.org/gems/dry-transaction/0.13/), `UseCases` aims to help developers write **clear and concise domain logic**.
+To fully understand `UseCases`, make sure to read [dry-transaction](https://dry-rb.org/gems/dry-transaction/0.13/)'s documentation first.
 
+### Writing your first use case
 
-`UseCases` 
+```ruby
+class Posts::Create < UseCases::Base
+  params do
+    required(:body).filled(:string).value(size?: 25..150)
+    required(:thread_id).filled(:integer)
+  end
+  
+  try :load_post_thread, failure: :not_found
+  
+  authorize 'User is not active' do |user, params, thread|
+    user.active?
+  end
+
+  authorize 'User must be active or the thread author.' do |user, params, thread|
+    user.active? || thread.author == user
+  end
+
+  step :sanitize_body
+ 
+  step :create_post
+  
+  private
+  
+  def load_post_thread(params, user)
+    Thread.find(params[:thread_id])
+  end
+  
+  def sanitize_body(params)
+    SanitizeText.new.call(params[:body]).to_monad
+  end
+  
+  def create_post(body, params, user)
+    post = Post.new(body: body, user_id: user.id, thread_id: params[:thread_id])
+  end
+end
+
+```
 
 ## Development
 
