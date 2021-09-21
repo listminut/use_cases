@@ -66,33 +66,5 @@ module UseCases
         !object.respond_to?(name, true)
       end
     end
-
-    class Map < Abstract
-      def call(*args)
-        Success(super(*args))
-      end
-    end
-
-    class Try < Abstract
-      def do_call(*args)
-        Success(super(*args))
-      rescue options[:catch] || StandardError => e
-        Failure([options[:failure], e.message])
-      end
-    end
-
-    class Check < Abstract
-      def do_call(*args)
-        result = super(*args)
-        result ? Success(result) : Failure([options[:failure], result])
-      end
-    end
-
-    class Tee < Abstract
-      def do_call(*args)
-        super(*args)
-        Success(previous_step_result.value)
-      end
-    end
   end
 end
