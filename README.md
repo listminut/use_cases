@@ -30,6 +30,10 @@ Or install it yourself as:
 
 To fully understand `UseCases`, make sure to read [dry-transaction](https://dry-rb.org/gems/dry-transaction/0.13/)'s documentation first.
 
+### Available DSL methods
+
+
+
 ### Example
 
 For the case of creating posts within a thread.
