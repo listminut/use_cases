@@ -5,8 +5,8 @@ source 'https://rubygems.org'
 # Specify your gem's dependencies in use_cases.gemspec
 gemspec
 
-gem 'activesupport'
-gem 'dry-validation'
+gem 'activesupport', '~> 5.2.6'
+gem 'dry-validation', '~> 1.7.0'
 gem 'dry-events', '~> 0.3.0'
 gem 'dry-matcher', '~> 0.9.0'
 gem 'dry-monads', '~> 1.4'
