@@ -3,7 +3,7 @@
 require "spec_helper"
 require "support/try_test_use_case"
 
-RSpec.describe UseCases::Steps::Try do
+RSpec.describe UseCases::StepAdapters::Try do
   subject { TryTestUseCase.new }
 
   let(:user) { double("user") }

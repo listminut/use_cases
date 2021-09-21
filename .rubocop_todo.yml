@@ -26,8 +26,8 @@ Lint/ConstantDefinitionInBlock:
   Exclude:
     - 'spec/use_cases/authorize_spec.rb'
     - 'spec/use_cases/base_spec.rb'
-    - 'spec/use_cases/steps/step_spec.rb'
-    - 'spec/use_cases/steps/try_spec.rb'
+    - 'spec/use_cases/step_adapters/step_spec.rb'
+    - 'spec/use_cases/step_adapters/try_spec.rb'
     - 'spec/use_cases/validate_spec.rb'
 
 # Offense count: 1

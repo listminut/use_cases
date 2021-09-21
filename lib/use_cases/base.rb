@@ -15,12 +15,12 @@ require "use_cases/params"
 require "use_cases/stack_runner"
 require "use_cases/step_result"
 require "use_cases/notifications"
-require "use_cases/steps/step"
-require "use_cases/steps/map"
-require "use_cases/steps/tee"
-require "use_cases/steps/try"
-require "use_cases/steps/check"
-require "use_cases/steps/enqueue"
+require "use_cases/step_adapters/step"
+require "use_cases/step_adapters/map"
+require "use_cases/step_adapters/tee"
+require "use_cases/step_adapters/try"
+require "use_cases/step_adapters/check"
+require "use_cases/step_adapters/enqueue" if defined? ActiveJob
 
 module UseCases
   class Base
@@ -30,12 +30,12 @@ module UseCases
     include Dry::Matcher.for(:call, with: Dry::Matcher::ResultMatcher)
 
     def self.register_adapters
-      register_adapter Steps::Step
-      register_adapter Steps::Tee
-      register_adapter Steps::Try
-      register_adapter Steps::Map
-      register_adapter Steps::Enqueue
-      register_adapter Steps::Check
+      register_adapter StepAdapters::Step
+      register_adapter StepAdapters::Tee
+      register_adapter StepAdapters::Try
+      register_adapter StepAdapters::Map
+      register_adapter StepAdapters::Check
+      register_adapter StepAdapters::Enqueue if defined? ActiveJob
     end
 
     def self.inherited(base)

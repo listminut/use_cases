@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require "use_cases/steps/abstract"
+require "use_cases/step_adapters/abstract"
 
 module UseCases
-  module Steps
+  module StepAdapters
     class Try < Abstract
       class InvalidReturnValue < StandardError; end
 

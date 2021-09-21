@@ -1,15 +1,14 @@
 # frozen_string_literal: true
 
-require "use_cases/steps/abstract"
+require "use_cases/step_adapters/abstract"
 
 module UseCases
-  module Steps
-    class Tee < Abstract
+  module StepAdapters
+    class Map < Abstract
       class InvalidReturnValue < StandardError; end
 
-      def do_call(*args)
-        super(*args)
-        result = previous_step_result.value
+      def call(*args)
+        result = super(*args)
         raise InvalidReturnValue, "The return value should not be a Monad." if result.is_a?(Dry::Monads::Result)
 
         Success(result)

@@ -3,7 +3,7 @@
 require "dry/monads/all"
 
 module UseCases
-  module Steps
+  module StepAdapters
     class Abstract
       include Dry::Monads
 

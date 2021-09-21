@@ -3,7 +3,7 @@
 require "spec_helper"
 require "support/enqueue_test_use_case"
 
-RSpec.describe UseCases::Steps::Enqueue do
+RSpec.describe UseCases::StepAdapters::Enqueue do
   subject { EnqueueTestUseCase.new }
 
   let(:user) { double("user") }
