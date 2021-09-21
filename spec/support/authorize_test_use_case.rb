@@ -5,7 +5,7 @@ class AuthorizeTestUseCase < UseCases::Base
 
   try :load_something_necessary_for_authorize
 
-  authorize(proc { |user| "User #{user.email} cannot perform this action" }) do |user, _params, previous_value|
+  authorize "User needs to be admin." do |user, _params, previous_value|
     user.admin?(true) && previous_value
   end
 

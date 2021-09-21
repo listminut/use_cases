@@ -7,15 +7,16 @@ module UseCases
     def self.included(base)
       base.class_eval do
         extend DSL
-        extend ClassMethods
       end
     end
 
     module DSL
-      def authorize(message_str_or_proc = "User unauthorized", &blk)
-        _define_authorize_step(message_str_or_proc, &blk)
+      def authorize(message = "User unauthorized", &blk)
+        define_method(next_authorize_step_name) do |previous_result, params, current_user|
+          blk.call(current_user, params, previous_result)
+        end
 
-        step(next_authorize_step_name)
+        check next_authorize_step_name, failure: :unauthorized, failure_message: message
 
         @authorize_step_count += 1
       end
@@ -35,17 +36,6 @@ module UseCases
       raise NoAuthorizationError,
             "Make sure to define at least one *authorize* block" \
             "for your use case (e.g. use `authorize { true }` to allow all users)."
-    end
-
-    module ClassMethods
-      def _define_authorize_step(message_str_or_proc, &blk)
-        define_method(next_authorize_step_name) do |previous_result, params, current_user|
-          return Success(previous_result) if blk.call(current_user, params, previous_result)
-
-          message = _resolve_message(message_str_or_proc, current_user, params, previous_result)
-          return Failure([:unauthorized, message])
-        end
-      end
     end
 
     def _resolve_message(message, *args)

@@ -11,7 +11,10 @@ module UseCases
         result = super(*args)
         raise InvalidReturnValue, "The return value should not be a Monad." if result.is_a?(Dry::Monads::Result)
 
-        result ? Success(result) : Failure([options[:failure] || :check_failure, result])
+        failure_code = options[:failure] || :check_failure
+        failure_message = options[:failure_message] || "Failed"
+
+        result ? Success(result) : Failure([failure_code, failure_message])
       end
     end
   end

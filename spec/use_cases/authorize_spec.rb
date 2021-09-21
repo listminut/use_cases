@@ -88,7 +88,7 @@ RSpec.describe UseCases::Authorize do
         end
       end
 
-      expect(result).to eq "User user@user.com cannot perform this action"
+      expect(result).to eq "User needs to be admin."
     end
   end
 end
