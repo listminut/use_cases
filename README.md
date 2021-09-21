@@ -1,4 +1,4 @@
-# `UseCases`
+# UseCases
 
 `UseCases` is a gem based on the [dry-transaction](https://dry-rb.org/gems/dry-transaction/) DSL that implements macros commonly used internally by Ring Twice.
 
@@ -30,10 +30,20 @@ Or install it yourself as:
 
 To fully understand `UseCases`, make sure to read [dry-transaction](https://dry-rb.org/gems/dry-transaction/0.13/)'s documentation first.
 
-### Writing your first use case
+### Example
+
+For the case of creating posts within a thread.
+
+**Specs**
+- Only active users or the thread owner can post.
+- The post must be between 25 and 150 characters.
+- The post must be sanitized to remove any sensitive or explicit content.
+- The post must be saved to the database in the end.
+- In case any conditions are not met, an failure should be returned with it's own error code.
 
 ```ruby
 class Posts::Create < UseCases::Base
+
   params do
     required(:body).filled(:string).value(size?: 25..150)
     required(:thread_id).filled(:integer)
@@ -65,9 +75,46 @@ class Posts::Create < UseCases::Base
   
   def create_post(body, params, user)
     post = Post.new(body: body, user_id: user.id, thread_id: params[:thread_id])
+
+    post.save ? Success(post) : Failure([:failed_to_save, post.errors.details])
   end
 end
+```
 
+And in your controller action
+```ruby
+# app/controllers/posts_controller.rb
+class PostsController < ApplicationController
+  def create
+    Posts::Create.new.call(params, current_user) do |match|
+      
+      # in success, the return value is the Success payload of the last step (#create_post)
+      match.success do |post|
+        # result => <Post:>
+      end
+      
+      # in case
+      match.failure :validation_error do |result|
+        # result => [:validation_error, ['validation_error', { thread_id: 'is missing' }]
+      end
+      
+      # in case ::try raises an error (ActiveRecord::NotFound in this case)
+      match.failure :not_found do |result|
+        # result => [:not_found, ['not_found', 'Could not find thread with id='<params[:thread_id]>'']
+      end
+
+      # in case any of the ::authorize blocks returns false
+      match.failure :unauthorized do |result|
+        # result => [:unauthorized, ['unauthorized', 'User is not active']
+      end
+      
+      # in case any of the ::authorize blocks returns false
+      match.failure :failed_to_save do |result|
+        # result => [:failed_to_save, ['failed_to_save', { user_id: 'some error' }]
+      end      
+    end
+  end
+end
 ```
 
 ## Development
