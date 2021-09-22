@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require "support/enqueue_test_use_case"
+require "support/test_subjects/enqueue_test_use_case"
 
 RSpec.describe UseCases::StepAdapters::Enqueue do
   subject { EnqueueTestUseCase.new }

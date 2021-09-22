@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require "support/external_operation"
-require "support/external_operation_returning_monads"
-require "support/use_case_with_external_operation"
+require "support/test_subjects/external_operation"
+require "support/test_subjects/external_operation_returning_monads"
+require "support/test_subjects/use_case_with_external_operation"
 
 RSpec.describe UseCases::StepAdapters::Step do
   subject { UseCaseWithExternalOperation.new }

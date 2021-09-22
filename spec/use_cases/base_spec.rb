@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require "support/base_test_use_case"
+require "support/test_subjects/base_test_use_case"
 
 RSpec.describe UseCases::Base do
   subject { BaseTestUseCase.new }

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require "support/validate_test_use_case"
+require "support/test_subjects/validate_test_use_case"
 
 RSpec.describe UseCases::Validate do
   subject { ValidateTestUseCase.new }

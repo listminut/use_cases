@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require "support/try_test_use_case"
+require "support/test_subjects/try_test_use_case"
 
 RSpec.describe UseCases::StepAdapters::Try do
   subject { TryTestUseCase.new }

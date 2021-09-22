@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require "support/tee_test_use_case"
+require "support/test_subjects/tee_test_use_case"
 
 RSpec.describe UseCases::StepAdapters::Tee do
   subject { TeeTestUseCase.new }

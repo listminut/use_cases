@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require "support/map_test_use_case"
+require "support/test_subjects/map_test_use_case"
 
 RSpec.describe UseCases::StepAdapters::Map do
   subject { MapTestUseCase.new }
