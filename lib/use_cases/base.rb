@@ -26,7 +26,7 @@ require "use_cases/step_adapters/enqueue"
 module UseCases
   class Base
     extend ::UseCases::DSL
-    include Dry::Monads[:result, :try]
+    include Dry::Monads[:result]
     include Dry::Monads::Do.for(:call)
     include Dry::Matcher.for(:call, with: Dry::Matcher::ResultMatcher)
 
