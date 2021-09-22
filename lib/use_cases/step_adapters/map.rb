@@ -7,7 +7,7 @@ module UseCases
     class Map < Abstract
       class InvalidReturnValue < StandardError; end
 
-      def call(*args)
+      def do_call(*args)
         result = super(*args)
         raise InvalidReturnValue, "The return value should not be a Monad." if result.is_a?(Dry::Monads::Result)
 

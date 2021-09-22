@@ -8,11 +8,12 @@ module UseCases
       class InvalidReturnValue < StandardError; end
 
       def do_call(*args)
-        super(*args)
-        result = previous_step_result.value
-        raise InvalidReturnValue, "The return value should not be a Monad." if result.is_a?(Dry::Monads::Result)
+        result = super(*args)
+      rescue StandardError => _e
+        raise InvalidReturnValue, "For a tee step, a Monad will have no effect." if result.is_a?(Dry::Monads::Result)
 
-        Success(result)
+        prev_result = previous_step_result.value
+        Success(prev_result)
       end
     end
   end
