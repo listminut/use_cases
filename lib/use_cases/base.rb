@@ -15,12 +15,13 @@ require "use_cases/params"
 require "use_cases/stack_runner"
 require "use_cases/step_result"
 require "use_cases/notifications"
+require "use_cases/step_active_job_adapter"
 require "use_cases/step_adapters/step"
 require "use_cases/step_adapters/map"
 require "use_cases/step_adapters/tee"
 require "use_cases/step_adapters/try"
 require "use_cases/step_adapters/check"
-require "use_cases/step_adapters/enqueue" if defined? ActiveJob
+require "use_cases/step_adapters/enqueue"
 
 module UseCases
   class Base
