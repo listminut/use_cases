@@ -2,11 +2,11 @@ PATH
   remote: .
   specs:
     use_cases (0.1.0)
-      activesupport (~> 5.2.6)
-      dry-events (>= 0.3.0)
-      dry-matcher (>= 0.9.0)
-      dry-monads (>= 1.4)
-      dry-validation (>= 1.6.0)
+      activesupport
+      dry-events
+      dry-matcher
+      dry-monads
+      dry-validation
 
 GEM
   remote: https://rubygems.org/
@@ -105,12 +105,12 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  activesupport (~> 5.2.6)
+  activesupport
   byebug
-  dry-events (>= 0.3.0)
-  dry-matcher (>= 0.9.0)
-  dry-monads (>= 1.4)
-  dry-validation (>= 1.7.0)
+  dry-events
+  dry-matcher
+  dry-monads
+  dry-validation
   rake (~> 13.0)
   rspec (~> 3.0)
   rubocop (~> 1.7)
