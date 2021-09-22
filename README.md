@@ -38,9 +38,121 @@ See [dry-validation](https://dry-rb.org/gems/dry-validation/)
 
 https://dry-rb.org/gems/dry-transaction/0.13/step-adapters/
 
+**Basic Example**
+
+```ruby
+class YourCase < UseCases::Base
+  params {}
+
+  step :do_something
+
+  def do_something(params, current_user)
+    params[:should_fail] ? Failure([:failed, "failed"]) : Success("it succeeds!")
+  end
+end
+
+params = { should_fail: true }
+
+YourCase.new.call(params, nil) do |match|
+  match.failure :failed do |(code, result)|
+    puts code
+  end
+
+  match.success do |message|
+    puts message
+  end  
+end
+# => failed
+
+params = { should_fail: false }
+
+YourCase.new.call(params, nil) do |match|
+  match.failure :failed do |(code, result)|
+    puts code
+  end
+
+  match.success do |message|
+    puts message
+  end
+end
+# => it succeeds!
+```
+
+**Complex Example**
+
+```ruby
+class YourCase < UseCases::Base
+  params {}
+
+  try :load_some_resource
+
+  step :change_this_resource
+
+  tee :log_a_message
+
+  check :user_can_create_another_resource?
+
+  map :create_some_already_validated_resource
+
+  enqueue :send_email_to_user
+
+  private
+
+  def load_some_resource(_, params)
+    Resource.find(params[:id])
+  end
+
+  def change_this_resource(resource, params)
+    resource.text = params[:new_text]
+
+    if resource.text == params[:new_text]
+      Success(resource)
+    else
+      Failure([:failed, "could not update resource"])
+    end
+  end
+
+  def log_a_message(resource)
+    Logger.info('Resource updated')
+  end
+
+  def user_can_create_another_resource?(_, _, user)
+    user.can_create?(Resource)
+  end
+
+  def create_some_already_validated_resource(resource, params, user)
+    new_resource = Resource.create(text: params[:text])
+  end
+
+  def send_email_to_user(new_resource, _, user)
+    ResourcEMailer.notify_user(user, new_resource).deliver!
+  end
+end
+```
+
 ### Authorization
 
 `authorize` is a `check` step that returns an `:unauthorized` code in it's `Failure`.
+
+**Example**
+
+```ruby
+class YourCase < UseCases::Base
+  authorize 'User must be over 18' do |user|
+    user.age >= 18
+  end
+end
+
+user = User.where('age = 15').first
+
+YourCase.new.call({}, user) do |match|
+  match.failure :unauthorized do |(code, result)|
+    puts code
+  end
+end
+# => User must be over 18
+```
+
 
 ### Example
 
