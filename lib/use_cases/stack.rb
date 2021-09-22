@@ -40,6 +40,10 @@ module UseCases
       steps.map(&:name)
     end
 
+    def include_step?(step_name)
+      step_names.include?(step_name)
+    end
+
     def find_step(step_name)
       steps.find { |step| step.name == step_name }
     end
