@@ -40,7 +40,7 @@ RSpec.describe UseCases::Authorize do
     end
 
     it "returns an error message" do
-      expect(subject).to fail_with_result "User needs to be admin."
+      expect(subject).to fail_with_payload "User needs to be admin."
     end
   end
 end

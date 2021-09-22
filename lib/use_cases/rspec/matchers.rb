@@ -9,7 +9,7 @@ RSpec::Matchers.define(:fail_with_code) do |expected_code|
   end
 end
 
-RSpec::Matchers.define(:fail_with_result) do |expected_result|
+RSpec::Matchers.define(:fail_with_payload) do |expected_result|
   match do |test_subject|
     expect(test_subject.failure?).to be true
     expect(test_subject.failure.last).to eq expected_result

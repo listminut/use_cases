@@ -24,7 +24,7 @@ RSpec.describe UseCases::StepAdapters::Step do
     end
 
     it "returns the error string" do
-      expect(subject.call(params, user)).to fail_with_result "some error"
+      expect(subject.call(params, user)).to fail_with_payload "some error"
     end
   end
 

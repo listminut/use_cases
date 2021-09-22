@@ -22,7 +22,7 @@ RSpec.describe UseCases::StepAdapters::Check do
     end
 
     it "returns the error string" do
-      expect(subject).to fail_with_result "User not admin"
+      expect(subject).to fail_with_payload "User not admin"
     end
   end
 
