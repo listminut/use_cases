@@ -31,6 +31,10 @@ module UseCases
       value.is_a?(Dry::Monads::Result::Failure)
     end
 
+    def failure
+      failure? && value.failure
+    end
+
     def nil?
       value.nil?
     end

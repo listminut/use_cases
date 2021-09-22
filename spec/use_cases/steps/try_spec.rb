@@ -19,35 +19,11 @@ RSpec.describe UseCases::StepAdapters::Try do
     end
 
     it "fails" do
-      result = nil
-
-      subject.call(params, user) do |match|
-        match.success do |value|
-          result = value
-        end
-
-        match.failure :failed_with_an_error do |(code, _message)|
-          result = code
-        end
-      end
-
-      expect(result).to eq :failed_with_an_error
+      expect(subject.call(params, user)).to fail_with_code :failed_with_an_error
     end
 
     it "returns the error string" do
-      result = nil
-
-      subject.call(params, user) do |match|
-        match.success do |value|
-          result = value
-        end
-
-        match.failure :failed_with_an_error do |(_code, message)|
-          result = message
-        end
-      end
-
-      expect(result).to eq "some error"
+      expect(subject.call(params, user)).to fail_with_result "some error"
     end
   end
 
@@ -67,19 +43,7 @@ RSpec.describe UseCases::StepAdapters::Try do
     end
 
     it "passes it's return value to the next step" do
-      result = nil
-
-      subject.call(params, user) do |match|
-        match.success do |value|
-          result = value
-        end
-
-        match.failure :failed_with_an_error do |(code, _message)|
-          result = code
-        end
-      end
-
-      expect(result).to eq "previous message: it succeeds!"
+      expect(subject.call(params, user)).to succeed_with "previous message: it succeeds!"
     end
   end
 end

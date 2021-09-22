@@ -4,7 +4,7 @@ require "spec_helper"
 require "support/test_subjects/check_test_use_case"
 
 RSpec.describe UseCases::StepAdapters::Check do
-  subject { CheckTestUseCase.new }
+  subject { CheckTestUseCase.new.call(params, user) }
 
   let(:user) { double("user") }
   let(:params) { {} }
@@ -18,35 +18,11 @@ RSpec.describe UseCases::StepAdapters::Check do
     end
 
     it "fails" do
-      result = nil
-
-      subject.call(params, user) do |match|
-        match.success do |value|
-          result = value
-        end
-
-        match.failure :user_not_admin do |(code, _message)|
-          result = code
-        end
-      end
-
-      expect(result).to eq :user_not_admin
+      expect(subject).to fail_with_code :user_not_admin
     end
 
     it "returns the error string" do
-      result = nil
-
-      subject.call(params, user) do |match|
-        match.success do |value|
-          result = value
-        end
-
-        match.failure :user_not_admin do |(_code, message)|
-          result = message
-        end
-      end
-
-      expect(result).to eq "User not admin"
+      expect(subject).to fail_with_result "User not admin"
     end
   end
 
@@ -56,19 +32,7 @@ RSpec.describe UseCases::StepAdapters::Check do
     end
 
     it "passes the previous return value to the next step" do
-      result = nil
-
-      subject.call(params, user) do |match|
-        match.success do |value|
-          result = value
-        end
-
-        match.failure :user_not_admin do |(code, _message)|
-          result = code
-        end
-      end
-
-      expect(result).to eq "it succeeds!"
+      expect(subject).to succeed_with "it succeeds!"
     end
   end
 end

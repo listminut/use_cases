@@ -4,13 +4,10 @@ require "spec_helper"
 require "support/test_subjects/map_test_use_case"
 
 RSpec.describe UseCases::StepAdapters::Map do
-  subject { MapTestUseCase.new }
+  subject { MapTestUseCase.new.call(params, user) }
 
   let(:user) { double("user") }
   let(:params) { {} }
-
-  before do
-  end
 
   context "when the map method returns false" do
     before do
@@ -18,19 +15,7 @@ RSpec.describe UseCases::StepAdapters::Map do
     end
 
     it "succeeds" do
-      result = nil
-
-      subject.call(params, user) do |match|
-        match.success do |value|
-          result = value
-        end
-
-        match.failure :user_not_admin do |(code, _message)|
-          result = code
-        end
-      end
-
-      expect(result).to eq true
+      expect(subject).to succeed_with true
     end
   end
 end

@@ -4,7 +4,7 @@ require "spec_helper"
 require "support/test_subjects/tee_test_use_case"
 
 RSpec.describe UseCases::StepAdapters::Tee do
-  subject { TeeTestUseCase.new }
+  subject { TeeTestUseCase.new.call(params, user) }
 
   let(:user) { double("user") }
   let(:params) { {} }
@@ -18,19 +18,7 @@ RSpec.describe UseCases::StepAdapters::Tee do
     end
 
     it "succeeds" do
-      result = nil
-
-      subject.call(params, user) do |match|
-        match.success do |value|
-          result = value
-        end
-
-        match.failure do |(code, _message)|
-          result = code
-        end
-      end
-
-      expect(result).to eq "it succeeds!"
+      expect(subject).to succeed_with "it succeeds!"
     end
   end
 end

@@ -4,7 +4,7 @@ require "spec_helper"
 require "support/test_subjects/authorize_test_use_case"
 
 RSpec.describe UseCases::Authorize do
-  subject { AuthorizeTestUseCase.new }
+  subject { AuthorizeTestUseCase.new.call(params, user) }
 
   let(:user) { double("user") }
   let(:params) { { required_string_param: "some string", value_checked_param: "some string" } }
@@ -15,19 +15,7 @@ RSpec.describe UseCases::Authorize do
     end
 
     it "succeeds and returns the contract" do
-      result = nil
-
-      subject.call(params, user) do |match|
-        match.success do |value|
-          result = value
-        end
-
-        match.failure do |value|
-          result = value
-        end
-      end
-
-      expect(result).to eq "resource loaded before authorizing"
+      expect(subject).to succeed_with "resource loaded before authorizing"
     end
 
     context "with an extra step after" do
@@ -36,19 +24,7 @@ RSpec.describe UseCases::Authorize do
       end
 
       it "it funnels down the result received before authorization" do
-        result = nil
-
-        subject.call(params, user) do |match|
-          match.success do |value|
-            result = value
-          end
-
-          match.failure do |value|
-            result = value
-          end
-        end
-
-        expect(result).to eq "previous result: resource loaded before authorizing"
+        expect(subject).to succeed_with "previous result: resource loaded before authorizing"
       end
     end
   end
@@ -60,35 +36,11 @@ RSpec.describe UseCases::Authorize do
     end
 
     it "fails with :unauthorized" do
-      result = nil
-
-      subject.call(params, user) do |match|
-        match.failure :unauthorized do |(code, _errors)|
-          result = code
-        end
-
-        match.success do |value|
-          result = value
-        end
-      end
-
-      expect(result).to eq(:unauthorized)
+      expect(subject).to fail_with_code :unauthorized
     end
 
     it "returns an error message" do
-      result = nil
-
-      subject.call(params, user) do |match|
-        match.failure :unauthorized do |(_code, errors)|
-          result = errors
-        end
-
-        match.success do |value|
-          result = value
-        end
-      end
-
-      expect(result).to eq "User needs to be admin."
+      expect(subject).to fail_with_result "User needs to be admin."
     end
   end
 end
