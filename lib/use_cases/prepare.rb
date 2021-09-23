@@ -10,7 +10,7 @@ module UseCases
 
     module DSL
       def prepare(name, options = {})
-        __steps__.unshift Map.new(name, nil, options)
+        __steps__.unshift Tee.new(name, nil, options)
       end
     end
   end
