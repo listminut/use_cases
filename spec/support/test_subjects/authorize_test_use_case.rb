@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class AuthorizeTestUseCase < UseCases::Base
+  prepare :do_nothing
+
   params {}
 
   try :load_something_necessary_for_authorize
@@ -10,6 +12,8 @@ class AuthorizeTestUseCase < UseCases::Base
   end
 
   private
+
+  def do_nothing; end
 
   def load_something_necessary_for_authorize
     "resource loaded before authorizing"
