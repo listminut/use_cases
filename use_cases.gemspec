@@ -30,9 +30,13 @@ Gem::Specification.new do |spec|
   # For more information and examples about making a new gem, checkout our
   # guide at: https://bundler.io/guides/creating_gem.html
 
-  spec.add_dependency "activesupport", "~> 5.2.6"
-  spec.add_dependency "dry-events", ">= 0.3.0"
-  spec.add_dependency "dry-matcher", ">= 0.9.0"
-  spec.add_dependency "dry-monads", ">= 1.4"
-  spec.add_dependency "dry-validation", ">= 1.6.0"
+  spec.add_dependency "activesupport"
+  spec.add_dependency "dry-events"
+  spec.add_dependency "dry-matcher"
+  spec.add_dependency "dry-monads"
+  spec.add_dependency "dry-validation"
+
+  spec.add_development_dependency "rubocop"
+  spec.add_development_dependency "rspec"
+  spec.add_development_dependency "rake"
 end
