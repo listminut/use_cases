@@ -14,6 +14,8 @@ module UseCases
       end
     end
 
+    def prepare; end
+
     def __steps__
       @__steps__ ||= []
     end

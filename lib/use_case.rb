@@ -15,22 +15,20 @@ require "use_cases/params"
 require "use_cases/stack_runner"
 require "use_cases/step_result"
 require "use_cases/notifications"
+require "use_cases/prepare"
 require "use_cases/step_adapters"
 
 module UseCase
-  def self.included(base)
-    base.class_eval do
-      include Dry::Monads[:result]
-      include Dry::Monads::Do.for(:call)
-      include Dry::Matcher.for(:call, with: Dry::Matcher::ResultMatcher)
+  include Dry::Monads[:result]
+  include Dry::Monads::Do.for(:call)
+  include Dry::Matcher.for(:call, with: Dry::Matcher::ResultMatcher)
 
-      extend UseCases::DSL
-      include UseCases::StepAdapters
-      include UseCases::Notifications
-      include UseCases::Validate
-      include UseCases::Authorize
-    end
-  end
+  extend UseCases::DSL
+  include UseCases::StepAdapters
+  include UseCases::Notifications
+  include UseCases::Validate
+  include UseCases::Authorize
+  include UseCases::Prepare
 
   attr_reader :stack
 
