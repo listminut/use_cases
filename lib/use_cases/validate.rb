@@ -63,7 +63,7 @@ module UseCases
 
       validation = contract.call(params.merge(current_user: current_user))
 
-      validation.success? ? Success(validation) : Failure([:validation_error, validation.errors.to_h])
+      validation.success? ? Success(validation.to_h) : Failure([:validation_error, validation.errors.to_h])
     end
 
     def contract
