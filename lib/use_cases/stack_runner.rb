@@ -8,7 +8,15 @@ module UseCases
       @stack = stack
     end
 
-    def call(*args)
+    def call(*args, &around_block)
+      return around_block.call { do_call(*args) } if around_block
+
+      do_call(*args)
+    end
+
+    private
+
+    def do_call(*args)
       stack.call do
         result = _run_step(stack, args)
 
@@ -17,8 +25,6 @@ module UseCases
         result
       end
     end
-
-    private
 
     def _run_step(stack, args)
       step = stack.current_step

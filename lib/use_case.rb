@@ -17,8 +17,11 @@ require "use_cases/step_result"
 require "use_cases/notifications"
 require "use_cases/prepare"
 require "use_cases/step_adapters"
+require "use_cases/module_optins"
 
 module UseCase
+  extend UseCases::ModuleOptins
+
   # rubocop:disable Metrics/MethodLength
   def self.included(base)
     base.class_eval do
@@ -27,6 +30,8 @@ module UseCase
       include Dry::Matcher.for(:call, with: Dry::Matcher::ResultMatcher)
 
       extend UseCases::DSL
+      extend UseCases::ModuleOptins
+
       include UseCases::StepAdapters
       include UseCases::Notifications
       include UseCases::Validate
@@ -45,6 +50,12 @@ module UseCase
 
   def call(params, current_user = nil)
     params = UseCases::Params.new(params)
-    UseCases::StackRunner.new(stack).call(params, current_user)
+    do_call(params, current_user)
+  end
+
+  private
+
+  def do_call(*args)
+    UseCases::StackRunner.new(stack).call(*args)
   end
 end
