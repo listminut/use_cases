@@ -17,6 +17,7 @@ module UseCases
         register_adapter StepAdapters::Try
         register_adapter StepAdapters::Map
         register_adapter StepAdapters::Check
+
         register_adapter StepAdapters::Enqueue if defined? ActiveJob
       end
     end
