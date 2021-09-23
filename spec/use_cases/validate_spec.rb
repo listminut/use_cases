@@ -28,7 +28,7 @@ RSpec.describe UseCases::Validate do
         end
       end
 
-      expect(result).to be_success
+      expect(result).to eq params
     end
   end
 

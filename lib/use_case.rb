@@ -19,16 +19,22 @@ require "use_cases/prepare"
 require "use_cases/step_adapters"
 
 module UseCase
-  include Dry::Monads[:result]
-  include Dry::Monads::Do.for(:call)
-  include Dry::Matcher.for(:call, with: Dry::Matcher::ResultMatcher)
+  # rubocop:disable Metrics/MethodLength
+  def self.included(base)
+    base.class_eval do
+      include Dry::Monads[:result]
+      include Dry::Monads::Do.for(:call)
+      include Dry::Matcher.for(:call, with: Dry::Matcher::ResultMatcher)
 
-  extend UseCases::DSL
-  include UseCases::StepAdapters
-  include UseCases::Notifications
-  include UseCases::Validate
-  include UseCases::Authorize
-  include UseCases::Prepare
+      extend UseCases::DSL
+      include UseCases::StepAdapters
+      include UseCases::Notifications
+      include UseCases::Validate
+      include UseCases::Authorize
+      include UseCases::Prepare
+    end
+  end
+  # rubocop:enable Metrics/MethodLength
 
   attr_reader :stack
 
