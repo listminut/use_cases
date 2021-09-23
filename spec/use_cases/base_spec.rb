@@ -12,7 +12,7 @@ RSpec.describe UseCases::Base do
     end
 
     it "has the defined steps in the right order" do
-      expect(subject.stack.steps.map(&:name)).to eq %i[validate do_something do_something_else authorize_1]
+      expect(subject.stack.steps.map(&:name)).to eq %i[validate do_something do_something_else admin?]
     end
   end
 end

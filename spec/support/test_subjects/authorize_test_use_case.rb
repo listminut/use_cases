@@ -7,9 +7,7 @@ class AuthorizeTestUseCase < UseCases::Base
 
   try :load_something_necessary_for_authorize
 
-  authorize "User needs to be admin." do |user, _params, previous_value|
-    user.admin?(true) && previous_value
-  end
+  authorize :user_admin?, failure_message: "User needs to be admin."
 
   private
 
@@ -17,6 +15,10 @@ class AuthorizeTestUseCase < UseCases::Base
 
   def load_something_necessary_for_authorize
     "resource loaded before authorizing"
+  end
+
+  def user_admin?(previous_value, _, user)
+    user.admin?(true) && previous_value
   end
 
   def run_something_after_authorizing(resource_loaded_before_authorizing)

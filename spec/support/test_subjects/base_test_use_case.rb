@@ -6,13 +6,15 @@ class BaseTestUseCase < UseCases::Base
     required(:type_checked_param).value(:string)
   end
 
+  def admin?(_, _, user)
+    user.admin?
+  end
+
   step :do_something
 
   try :do_something_else
 
-  authorize do |user, _params, _do_something_else_result|
-    user.admin?
-  end
+  authorize :admin?, failure_message: "User must be admin"
 
   private
 

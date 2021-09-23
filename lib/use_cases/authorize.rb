@@ -13,7 +13,7 @@ module UseCases
     module DSL
       def authorize(step_name, options = {})
         options[:failure] = :unauthorized
-        check step_name, options
+        check step_name, **options
       end
     end
   end
