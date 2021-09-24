@@ -23,6 +23,7 @@ module UseCase
   extend UseCases::ModuleOptins
 
   def self.included(base)
+    super
     base.class_eval do
       include Dry::Monads[:result]
       include Dry::Monads::Do.for(:call)

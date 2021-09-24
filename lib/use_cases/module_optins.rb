@@ -7,41 +7,35 @@ require "use_cases/validate"
 
 module UseCases
   module ModuleOptins
+    attr_accessor :options
+
     def [](*options)
-      @options = options
+      @modules = []
+      @modules << UseCases::Authorize if options.include?(:authorized)
+      @modules << UseCases::Transaction if options.include?(:transactional)
+      @modules << UseCases::Validate if options.include?(:validated)
+      @modules << UseCases::Prepare if options.include?(:prepared)
       self
-    end
-
-    def options
-      @options
-    end
-
-    def option?(option_name)
-      @options&.include?(option_name)
-    end
-
-    def inherited(base)
-      super
-      base.include UseCases::Authorize if option?(:authorized)
-      base.include UseCases::Transaction if option?(:transactional)
-      base.include UseCases::Validate if option?(:validated)
-      base.include UseCases::Prepare if option?(:prepared)
-
-      reset_options!
     end
 
     def included(base)
       super
-      base.include UseCases::Authorize if option?(:authorized)
-      base.include UseCases::Transaction if option?(:transactional)
-      base.include UseCases::Validate if option?(:validated)
-      base.include UseCases::Prepare if option?(:prepared)
+      @modules ||= []
+      return if @modules.empty?
 
-      reset_options!
+      base.include(*@modules)
     end
 
-    def reset_options!
-      @options = []
+    def inherited(base)
+      super
+      @modules ||= []
+      return if @modules.empty?
+
+      base.include(*@modules)
+    end
+
+    def descendants
+      ObjectSpace.each_object(Class).select { |klass| klass < self }
     end
   end
 end
