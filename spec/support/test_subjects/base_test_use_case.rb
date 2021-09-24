@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class BaseTestUseCase < UseCases::Base
+class BaseTestUseCase < UseCases::Base[:validated, :authorized]
   params do
     required(:required_string_param).filled(:string)
     required(:type_checked_param).value(:string)

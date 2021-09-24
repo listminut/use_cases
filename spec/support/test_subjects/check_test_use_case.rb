@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class CheckTestUseCase < UseCases::Base
-  params {}
-
   step :something_before_the_check
 
   check :user_admin?, failure: :user_not_admin, failure_message: "User not admin"

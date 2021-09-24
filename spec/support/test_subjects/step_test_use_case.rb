@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class StepTestUseCase < UseCases::Base
-  params {}
-
   step :do_something
 
   step :do_something_after

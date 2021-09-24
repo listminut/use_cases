@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class UseCaseWithExternalOperation < UseCases::Base
-  params {}
-
   step :external_operation, with: ExternalOperation.new
 
   check :validate_external_operation

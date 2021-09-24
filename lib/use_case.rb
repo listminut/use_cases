@@ -22,7 +22,6 @@ require "use_cases/module_optins"
 module UseCase
   extend UseCases::ModuleOptins
 
-  # rubocop:disable Metrics/MethodLength
   def self.included(base)
     base.class_eval do
       include Dry::Monads[:result]
@@ -34,12 +33,8 @@ module UseCase
 
       include UseCases::StepAdapters
       include UseCases::Notifications
-      include UseCases::Validate
-      include UseCases::Authorize
-      include UseCases::Prepare
     end
   end
-  # rubocop:enable Metrics/MethodLength
 
   attr_reader :stack
 

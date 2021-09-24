@@ -3,8 +3,6 @@
 class TransactionTestUseCase < UseCases::Base[:transactional]
   SomeError = Class.new(StandardError)
 
-  params {}
-
   tee :run_something
   try :some_step, catch: SomeError, failure: :not_found
 

@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class EnqueueTestUseCase < UseCases::Base
-  params {}
-
   try :load_something_to_be_used_by_enqueue
 
   def load_something_to_be_used_by_enqueue
