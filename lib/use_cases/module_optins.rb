@@ -30,6 +30,16 @@ module UseCases
       reset_options!
     end
 
+    def included(base)
+      super
+      base.include UseCases::Authorize if option?(:authorized)
+      base.include UseCases::Transaction if option?(:transactional)
+      base.include UseCases::Validate if option?(:validated)
+      base.include UseCases::Prepare if option?(:prepared)
+
+      reset_options!
+    end
+
     def reset_options!
       @options = []
     end
