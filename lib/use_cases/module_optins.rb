@@ -24,6 +24,7 @@ module UseCases
       return if @modules.empty?
 
       base.include(*@modules)
+      @modules = nil
     end
 
     def inherited(base)
@@ -32,6 +33,7 @@ module UseCases
       return if @modules.empty?
 
       base.include(*@modules)
+      @modules = nil
     end
 
     def descendants
