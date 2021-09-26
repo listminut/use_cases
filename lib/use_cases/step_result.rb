@@ -11,15 +11,10 @@ module UseCases
     end
 
     def value
-      return result unless result.is_a?(Dry::Monads::Result)
+      return result if result_not_monad?
+      return nil if result_empty?
 
-      if result.success? && result.value! == Dry::Monads::Unit
-        nil
-      elsif result.success?
-        result.value!
-      else
-        result
-      end
+      result.success? ? result.value! : result
     end
     alias value! value
 
@@ -44,9 +39,17 @@ module UseCases
     end
 
     def to_result
-      value.to_result if value.is_a?(Dry::Monads::Result::Failure)
+      value.to_result if failure?
 
       result
+    end
+
+    def result_empty?
+      result.success? && result.value! == Dry::Monads::Unit
+    end
+
+    def result_not_monad?
+      !result.is_a?(Dry::Monads::Result)
     end
   end
 end
