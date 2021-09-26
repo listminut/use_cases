@@ -18,3 +18,4 @@ jobs:
         uses: paambaati/codeclimate-action@v2.7.5
         env:
           CC_TEST_REPORTER_ID: 4da939c3df4f671d70f77702b175ccd8244b208670853ac48a5d33c7b8b5a0a0
+          COVERAGE_FILE: coverage/.resultset.json
