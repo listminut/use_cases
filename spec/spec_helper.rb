@@ -2,6 +2,9 @@
 
 require "use_cases"
 require "use_cases/rspec/matchers"
+require "simplecov"
+
+SimpleCov.start
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
