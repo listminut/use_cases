@@ -13,9 +13,9 @@ module UseCases
     def value
       return result unless result.is_a?(Dry::Monads::Result)
 
-      if !result.is_a?(Dry::Monads::Result::Failure) && result.value! == Dry::Monads::Unit
+      if result.success? && result.value! == Dry::Monads::Unit
         nil
-      elsif !result.is_a?(Dry::Monads::Result::Failure)
+      elsif result.success?
         result.value!
       else
         result

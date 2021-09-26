@@ -4,7 +4,7 @@ require "use_cases/step_adapters/abstract"
 
 module UseCases
   module StepAdapters
-    class Tee < Abstract
+    class Tee < UseCases::StepAdapters::Abstract
       class InvalidReturnValue < StandardError; end
 
       def do_call(*args)

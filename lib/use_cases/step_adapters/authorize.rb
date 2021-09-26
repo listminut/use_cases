@@ -4,7 +4,7 @@ require "use_cases/step_adapters/check"
 
 module UseCases
   module StepAdapters
-    class Authorize < Check
+    class Authorize < UseCases::StepAdapters::Check
       class InvalidReturnValue < StandardError; end
 
       def do_call(*args)
