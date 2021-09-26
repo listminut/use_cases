@@ -26,6 +26,6 @@ end
 RSpec::Matchers.define(:succeed_with) do |expected_result|
   match do |test_subject|
     expect(test_subject.success?).to be true
-    expect(test_subject.value).to eq expected_result
+    expect(test_subject.success).to eq expected_result
   end
 end

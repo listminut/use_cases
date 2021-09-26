@@ -35,6 +35,10 @@ module UseCases
       failure? && value.failure
     end
 
+    def success
+      success? && value.success
+    end
+
     def nil?
       value.nil?
     end
