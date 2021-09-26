@@ -36,7 +36,7 @@ module UseCases
     end
 
     def success
-      success? && value.success
+      success? && value
     end
 
     def nil?
