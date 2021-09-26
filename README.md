@@ -1,3 +1,7 @@
+[![Maintainability](https://api.codeclimate.com/v1/badges/b47701c9616987832bba/maintainability)](https://codeclimate.com/github/listminut/use_cases/maintainability)
+
+[![Test Coverage](https://api.codeclimate.com/v1/badges/b47701c9616987832bba/test_coverage)](https://codeclimate.com/github/listminut/use_cases/test_coverage)
+
 # UseCases
 
 `UseCases` is a gem based on the [dry-transaction](https://dry-rb.org/gems/dry-transaction/) DSL that implements macros commonly used internally by Ring Twice.
@@ -60,7 +64,7 @@ YourCase.new.call(params, nil) do |match|
 
   match.success do |message|
     puts message
-  end  
+  end
 end
 # => failed
 
@@ -153,12 +157,12 @@ end
 # => User must be over 18
 ```
 
-
 ### Example
 
 For the case of creating posts within a thread.
 
 **Specs**
+
 - Only active users or the thread owner can post.
 - The post must be between 25 and 150 characters.
 - The post must be sanitized to remove any sensitive or explicit content.
@@ -172,9 +176,9 @@ class Posts::Create < UseCases::Base
     required(:body).filled(:string).value(size?: 25..150)
     required(:thread_id).filled(:integer)
   end
-  
+
   try :load_post_thread, failure: :not_found
-  
+
   authorize 'User is not active' do |user, params, thread|
     user.active?
   end
@@ -184,19 +188,19 @@ class Posts::Create < UseCases::Base
   end
 
   step :sanitize_body
- 
+
   step :create_post
-  
+
   private
-  
+
   def load_post_thread(params, user)
     Thread.find(params[:thread_id])
   end
-  
+
   def sanitize_body(params)
     SanitizeText.new.call(params[:body]).to_monad
   end
-  
+
   def create_post(body, params, user)
     post = Post.new(body: body, user_id: user.id, thread_id: params[:thread_id])
 
@@ -206,22 +210,23 @@ end
 ```
 
 And in your controller action
+
 ```ruby
 # app/controllers/posts_controller.rb
 class PostsController < ApplicationController
   def create
     Posts::Create.new.call(params, current_user) do |match|
-      
+
       # in success, the return value is the Success payload of the last step (#create_post)
       match.success do |post|
         # result => <Post:>
       end
-      
+
       # in case ::params or any other dry-validation fails.
       match.failure :validation_error do |result|
         # result => [:validation_error, ['validation_error', { thread_id: 'is missing' }]
       end
-      
+
       # in case ::try raises an error (ActiveRecord::NotFound in this case)
       match.failure :not_found do |result|
         # result => [:not_found, ['not_found', 'Could not find thread with id='<params[:thread_id]>'']
@@ -231,11 +236,11 @@ class PostsController < ApplicationController
       match.failure :unauthorized do |result|
         # result => [:unauthorized, ['unauthorized', 'User is not active']
       end
-      
+
       # in case #create_post returns a Failure
       match.failure :failed_to_save do |result|
         # result => [:failed_to_save, ['failed_to_save', { user_id: 'some error' }]
-      end      
+      end
     end
   end
 end
