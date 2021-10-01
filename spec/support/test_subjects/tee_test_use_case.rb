@@ -12,6 +12,6 @@ class TeeTestUseCase < UseCases::Base
   end
 
   def something_that_can_fail_and_we_dont_care(_previous_input, _params, _user)
-    raise StandardError
+    "do something else that is meaningless"
   end
 end
