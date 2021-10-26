@@ -5,7 +5,7 @@ require "rspec"
 RSpec::Matchers.define(:be_failure_with_code) do |expected_code|
   match do |test_subject|
     expect(test_subject.failure?).to be true
-    expect(test_subject.failure.first).to eq expected_code
+    expect(test_subject.failure.first).to eql expected_code
   end
 
   failure_message do |test_subject|
@@ -20,7 +20,7 @@ end
 RSpec::Matchers.define(:be_failure_with_payload) do |expected_result|
   match do |test_subject|
     expect(test_subject.failure?).to be true
-    expect(test_subject.failure.last).to eq expected_result
+    expect(test_subject.failure.last).to eql expected_result
   end
 
   failure_message do |test_subject|
@@ -35,7 +35,7 @@ end
 RSpec::Matchers.define(:be_failure_with) do |*expected_failure|
   match do |test_subject|
     expect(test_subject.failure?).to be true
-    expect(test_subject.failure).to eq expected_failure
+    expect(test_subject.failure).to eql expected_failure
   end
 
   failure_message do |test_subject|
@@ -50,7 +50,7 @@ end
 RSpec::Matchers.define(:be_successful_with) do |expected_result|
   match do |test_subject|
     expect(test_subject.success?).to be true
-    expect(test_subject.success).to eq expected_result
+    expect(test_subject.success).to eql expected_result
   end
 
   failure_message do |test_subject|
