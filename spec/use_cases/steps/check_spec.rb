@@ -18,11 +18,11 @@ RSpec.describe UseCases::StepAdapters::Check do
     end
 
     it "fails" do
-      expect(subject).to fail_with_code :user_not_admin
+      expect(subject).to be_failure_with_code :user_not_admin
     end
 
     it "returns the error string" do
-      expect(subject).to fail_with_payload "User not admin"
+      expect(subject).to be_failure_with_payload "User not admin"
     end
   end
 
@@ -32,7 +32,7 @@ RSpec.describe UseCases::StepAdapters::Check do
     end
 
     it "passes the previous return value to the next step" do
-      expect(subject).to succeed_with "it succeeds!"
+      expect(subject).to be_successful_with "it succeeds!"
     end
   end
 end

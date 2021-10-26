@@ -26,14 +26,13 @@ module UseCases
     def self.serialize_step_arguments(args)
       args.select.map.with_index do |arg, index|
         ActiveJob::Arguments.send(:serialize_argument, arg)
-        false
       rescue ActiveJob::SerializationError => _e
-        args = arg.serialize.merge("_serialized_by_use_case" => true, "_class" => arg.class.name)
-
+        arg.serialize.merge("_serialized_by_use_case" => true, "_class" => arg.class.name)
       rescue NoMethodError => _e
         puts "[WARNING] #{arg} of class (#{arg.clas}) (index = #{index})" \
              "is not serializable and does not repond to #serialize and will be ignored."
-        false
+      else
+        arg
       end
     end
   end

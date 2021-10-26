@@ -38,10 +38,7 @@ RSpec.describe UseCases::StepAdapters::Enqueue do
       .with(*job_arguments)
     )
 
-    subject.call(params, user) do |match|
-      match.success {}
-      match.failure(:failed_with_an_error) {}
-    end
+    subject.call(params, user)
   end
 
   it "performs the right action when the job received these arguments" do
