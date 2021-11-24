@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "byebug"
-
 module UseCases
   module Notifications
     def self.included(base)
