@@ -15,7 +15,7 @@ RSpec.describe UseCases::StepAdapters::Map do
     end
 
     it "succeeds" do
-      expect(subject).to succeed_with true
+      expect(subject).to be_successful_with true
     end
   end
 end

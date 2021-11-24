@@ -15,7 +15,7 @@ RSpec.describe UseCases::Authorize do
     end
 
     it "succeeds and returns the contract" do
-      expect(subject).to succeed_with "resource loaded before authorizing"
+      expect(subject).to be_successful_with "resource loaded before authorizing"
     end
 
     context "with an extra step after" do
@@ -24,7 +24,7 @@ RSpec.describe UseCases::Authorize do
       end
 
       it "it funnels down the result received before authorization" do
-        expect(subject).to succeed_with "previous result: resource loaded before authorizing"
+        expect(subject).to be_successful_with "previous result: resource loaded before authorizing"
       end
     end
   end
@@ -36,11 +36,11 @@ RSpec.describe UseCases::Authorize do
     end
 
     it "fails with :unauthorized" do
-      expect(subject).to fail_with_code :unauthorized
+      expect(subject).to be_failure_with_code :unauthorized
     end
 
     it "returns an error message" do
-      expect(subject).to fail_with_payload "User needs to be admin."
+      expect(subject).to be_failure_with_payload "User needs to be admin."
     end
   end
 end

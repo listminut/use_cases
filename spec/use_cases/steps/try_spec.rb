@@ -19,11 +19,11 @@ RSpec.describe UseCases::StepAdapters::Try do
     end
 
     it "fails" do
-      expect(subject.call(params, user)).to fail_with_code :failed_with_an_error
+      expect(subject.call(params, user)).to be_failure_with_code :failed_with_an_error
     end
 
     it "returns the error string" do
-      expect(subject.call(params, user)).to fail_with_payload "some error"
+      expect(subject.call(params, user)).to be_failure_with_payload "some error"
     end
   end
 
@@ -43,7 +43,7 @@ RSpec.describe UseCases::StepAdapters::Try do
     end
 
     it "passes it's return value to the next step" do
-      expect(subject.call(params, user)).to succeed_with "previous message: it succeeds!"
+      expect(subject.call(params, user)).to be_successful_with "previous message: it succeeds!"
     end
   end
 end

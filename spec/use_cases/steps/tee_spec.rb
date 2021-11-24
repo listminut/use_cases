@@ -18,7 +18,7 @@ RSpec.describe UseCases::StepAdapters::Tee do
     end
 
     it "succeeds" do
-      expect(subject).to succeed_with "it succeeds!"
+      expect(subject).to be_successful_with "it succeeds!"
     end
   end
 end
