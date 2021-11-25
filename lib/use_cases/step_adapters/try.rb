@@ -13,7 +13,7 @@ module UseCases
 
         Success(result)
       rescue options[:catch] || StandardError => e
-        Failure([options[:failure], e.message])
+        Failure([options[:failure], options[:failure_message] || e.message])
       end
     end
   end

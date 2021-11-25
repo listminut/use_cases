@@ -12,8 +12,8 @@ module UseCases
         prev_result = previous_step_result.value
         raise InvalidReturnValue, "The return value should not be a Monad." if result.is_a?(Dry::Monads::Result)
 
-        failure_code = options[:failure] || :check_failure
-        failure_message = options[:failure_message] || "Failed"
+        failure_code = options[:failure] || :unauthorized
+        failure_message = options[:failure_message] || "Not Authorized"
 
         result ? Success(prev_result) : Failure([failure_code, failure_message])
       end

@@ -3,7 +3,7 @@
 class TryTestUseCase < UseCases::Base
   SomeError = Class.new(StandardError)
 
-  try :do_something, failure: :failed_with_an_error, catch: TryTestUseCase::SomeError
+  try :do_something, failure: :failed_with_an_error, catch: TryTestUseCase::SomeError, failure_message: "some other error"
 
   step :do_something_after
 
