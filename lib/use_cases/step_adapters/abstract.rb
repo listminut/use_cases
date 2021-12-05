@@ -55,14 +55,14 @@ module UseCases
       end
 
       def callable_proc
-        callable_object.method(callable_method)
+        callable_object.method(callable_method).to_proc
       end
 
       def callable_object
         case options[:with]
         when NilClass, FalseClass then object
         when String               then object.send(options[:with])
-        else                           options[:with]
+        else                           send(options[:with])
         end
       end
 
