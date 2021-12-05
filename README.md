@@ -4,6 +4,8 @@
 
 # UseCases
 
+## Currently Unstable! Use at your own risk.
+
 `UseCases` is a gem based on the [dry-transaction](https://dry-rb.org/gems/dry-transaction/) DSL that implements macros commonly used internally by Ring Twice.
 
 `UseCases` does not however use `dry-transaction` behind the scenes. Instead it relies on other `dry` libraries like [dry-validation](https://dry-rb.org/gems/dry-validation/), [dry-events](https://dry-rb.org/gems/dry-validation/) and [dry-monads](https://dry-rb.org/gems/dry-validation/) to implement a DSL that can be flexible enough for our needs.
