@@ -61,8 +61,8 @@ module UseCases
       def callable_object
         case options[:with]
         when NilClass, FalseClass then object
-        when String               then object.send(options[:with])
-        else                           send(options[:with])
+        when String, Symbol       then object.send(options[:with])
+        else                           options[:with]
         end
       end
 

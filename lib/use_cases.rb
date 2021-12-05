@@ -4,4 +4,8 @@ require_relative "use_case"
 require_relative "use_cases/version"
 require_relative "use_cases/base"
 
-module UseCases; end
+module UseCases
+  def self.register_type(type_name, klass)
+
+  end
+end
