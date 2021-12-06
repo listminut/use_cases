@@ -9,7 +9,7 @@ RSpec::Matchers.define(:be_failure_with_code) do |expected_code|
   end
 
   failure_message do |test_subject|
-    if text_subject.failure?
+    if test_subject.failure?
       "the use case was expected to fail with code #{expected_code} but it returned #{test_subject.failure.first}"
     else
       "the use case was expected to fail with code #{expected_code} but it did not fail"
