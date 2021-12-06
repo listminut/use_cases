@@ -61,9 +61,14 @@ module UseCases
     def validate(params, current_user)
       return Failure([:validation_error, "*params* must be a hash."]) unless params.respond_to?(:merge)
 
-      validation = contract.call(params.merge(current_user: current_user))
+      validation = contract.call(params)
 
-      validation.success? ? Success(validation.to_h) : Failure([:validation_error, validation.errors.to_h])
+      if validation.success?
+        params.merge!(validation.to_h)
+        Success(validation.to_h)
+      else
+        Failure([:validation_error, validation.errors.to_h])
+      end
     end
 
     def contract
