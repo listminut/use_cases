@@ -40,25 +40,28 @@ To get a good basis to get started on `UseCases`, make sure to read [dry-transac
 
 See [dry-validation](https://dry-rb.org/gems/dry-validation/)
 
-### Step Adapters
-
-https://dry-rb.org/gems/dry-transaction/0.13/step-adapters/
+### Creating a Use Case
 
 **Basic Example**
 
 ```ruby
-class YourCase < UseCases::Base
-  params do
-    required(:some_param).filled(:string)
+class DeleteUser
+  include UseCase
+
+  check :current_user_is_user?
+  step :build_user
+  map :persist_user
+
+  private
+
+  def current_user_is_user?(params, current_user)
   end
 
-  rule(:some_param) do
-    key.failure "too long" if value.length > 40
+  def build_user(params, current_user)
   end
 
-  step :do_something
 
-  def do_something(params, current_user)
+  def do_something(user, params, current_user)
     params[:should_fail] ? Failure([:failed, "failed"]) : Success("it succeeds!")
   end
 end

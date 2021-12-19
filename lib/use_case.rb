@@ -6,8 +6,6 @@ require "dry/monads/do"
 require "dry/monads/do/all"
 require "dry/matcher/result_matcher"
 
-require "byebug"
-
 require "use_cases/dsl"
 require "use_cases/stack"
 require "use_cases/params"

@@ -11,6 +11,15 @@ RSpec.describe UseCases::ModuleOptins::Publishing do
   let(:payload) { double("payload") }
   let(:result) { double("result", success?: true, value!: payload) }
 
+  before do
+    stub_const("ActiveJob", Module.new)
+    stub_const("ActiveJob::Base", Class.new)
+
+    load "use_cases/events/publish_job.rb" unless defined? UseCases::Events::PublishJob
+
+    allow(UseCases::Events::PublishJob).to receive(:perform_later)
+  end
+
   context "when it raises an error caught by the transaction" do
     before do
       allow(result).to receive(:is_a?).with(Dry::Monads::Result).and_return(true)
@@ -18,26 +27,19 @@ RSpec.describe UseCases::ModuleOptins::Publishing do
     end
 
     it "publishes an event for each step" do
-      expect(UseCases.publisher).to receive(:publish).with('events.step.success', params)
-      expect(UseCases.publisher).to receive(:publish).with('events.try.failure', [nil, ""])
+      expect(UseCases.publisher).to receive(:publish).with("events.step.success", params)
+      expect(UseCases.publisher).to receive(:publish).with("events.try.failure", [nil, ""])
       subject.call(params, user)
     end
 
     context "when active jobs is defined" do
-      before do
-        stub_const("ActiveJob", Module.new)
-        stub_const("ActiveJob::Base", Class.new)
-        
-        load "use_cases/events/publish_job.rb"
-      end
-
       it "published an async event for each step" do
-        expect(UseCases::Events::PublishJob).to receive(:perform_later).with('events.step.success', params.to_json)
-        expect(UseCases::Events::PublishJob).to receive(:perform_later).with('events.try.failure', [nil, ""].to_json)
-        
+        expect(UseCases::Events::PublishJob).to receive(:perform_later).with("events.step.success", params.to_json)
+        expect(UseCases::Events::PublishJob).to receive(:perform_later).with("events.try.failure", [nil, ""].to_json)
 
         subject.call(params, user)
       end
     end
   end
 end
+ 

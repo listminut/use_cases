@@ -16,7 +16,7 @@ module UseCases
     def deserialize_step_arguments(args)
       args.map do |arg|
         if arg.is_a?(Hash) && arg.delete("_serialized_by_use_case")
-          arg.delete('_class').constantize.new(arg)
+          arg.delete("_class").constantize.new(arg)
         else
           arg
         end

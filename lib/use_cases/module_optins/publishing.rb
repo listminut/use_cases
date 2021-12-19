@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "use_cases/events/publisher"
+require "use_cases/events/subscriber"
 require "use_cases/events/publish_job"
 
 module UseCases
