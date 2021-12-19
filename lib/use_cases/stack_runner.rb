@@ -8,9 +8,7 @@ module UseCases
       @stack = stack
     end
 
-    def call(*args, &around_block)
-      return around_block.call { do_call(*args) } if around_block
-
+    def call(*args)
       do_call(*args)
     end
 
@@ -19,6 +17,7 @@ module UseCases
     def do_call(*args)
       stack.call do
         result = _run_step(stack, args)
+        args.last.call(result, stack.current_step) if args.last.is_a? Proc
 
         return result if result.failure?
 

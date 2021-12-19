@@ -3,7 +3,7 @@
 require "spec_helper"
 require "support/test_subjects/authorize_test_use_case"
 
-RSpec.describe UseCases::Authorize do
+RSpec.describe UseCases::ModuleOptins::Authorized do
   subject { AuthorizeTestUseCase.new.call(params, user) }
 
   let(:user) { double("user") }

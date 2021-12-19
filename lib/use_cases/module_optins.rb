@@ -1,39 +1,37 @@
 # frozen_string_literal: true
 
-require "use_cases/authorize"
-require "use_cases/prepare"
-require "use_cases/transaction"
-require "use_cases/validate"
+require "use_cases/module_optins/prepared"
+require "use_cases/module_optins/transactional"
+require "use_cases/module_optins/validated"
+require "use_cases/module_optins/publishing"
+require "use_cases/module_optins/authorized"
 
 module UseCases
   module ModuleOptins
     attr_accessor :options
 
+    OPTINS = {
+      authorized: Authorized,
+      transactional: Transactional,
+      validated: Validated,
+      prepared: Prepared,
+      publishing: Publishing
+    }
+
     def [](*options)
-      @modules = []
-      @modules << UseCases::Authorize if options.include?(:authorized)
-      @modules << UseCases::Transaction if options.include?(:transactional)
-      @modules << UseCases::Validate if options.include?(:validated)
-      @modules << UseCases::Prepare if options.include?(:prepared)
-      self
-    end
+      modules = [self]
 
-    def included(base)
-      super
-      @modules ||= []
-      return if @modules.empty?
+      OPTINS.each do |key, module_constant|
+        modules << module_constant if options.include?(key)
+      end
 
-      base.include(*@modules)
-      @modules = nil
-    end
+      supermodule = Module.new
 
-    def inherited(base)
-      super
-      @modules ||= []
-      return if @modules.empty?
+      supermodule.define_singleton_method(:included) do |base|
+        base.include(*modules)
+      end
 
-      base.include(*@modules)
-      @modules = nil
+      supermodule
     end
 
     def descendants

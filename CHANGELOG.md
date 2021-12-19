@@ -9,7 +9,7 @@
   - Notifications [WIP]
   - StackRunner 
   - Stack
-  - StepResult
+  - UseCases::Result
   - Steps
   - Validate
 

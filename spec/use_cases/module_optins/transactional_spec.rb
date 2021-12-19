@@ -3,7 +3,7 @@
 require "spec_helper"
 require "support/test_subjects/transaction_test_use_case"
 
-RSpec.describe UseCases::Transaction do
+RSpec.describe UseCases::ModuleOptins::Transactional do
   subject { TransactionTestUseCase.new }
   let(:transaction_handler) { double("A Transaction Handler") }
 
@@ -17,7 +17,9 @@ RSpec.describe UseCases::Transaction do
     let(:params) { { raise_not_found: true } }
 
     before do
-      allow(transaction_handler).to receive(:transaction) { |&blk| raise StandardError if blk.call.failure? }
+      allow(transaction_handler).to receive(:transaction) do |&blk|
+        raise StandardError if blk.call.failure?
+      end
       allow(user).to receive(:admin?).and_return(true)
     end
 

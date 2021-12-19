@@ -3,7 +3,7 @@
 require "spec_helper"
 require "support/test_subjects/base_test_use_case"
 
-RSpec.describe UseCases::Base do
+RSpec.describe UseCase do
   subject { BaseTestUseCase.new }
 
   describe "#stack" do

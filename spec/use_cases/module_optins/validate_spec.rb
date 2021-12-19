@@ -3,7 +3,7 @@
 require "spec_helper"
 require "support/test_subjects/validate_test_use_case"
 
-RSpec.describe UseCases::Validate do
+RSpec.describe UseCases::ModuleOptins::Validated do
   subject { ValidateTestUseCase.new }
 
   let(:user) { double("user") }

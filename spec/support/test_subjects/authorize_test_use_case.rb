@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
-class AuthorizeTestUseCase < UseCases::Base[:authorized, :prepared]
+class AuthorizeTestUseCase
+  include UseCase[:authorized, :prepared]
+
   prepare :do_nothing
 
   try :load_something_necessary_for_authorize

@@ -6,20 +6,18 @@ require "dry/monads/do"
 require "dry/monads/do/all"
 require "dry/matcher/result_matcher"
 
-require "use_cases/authorize"
+require "byebug"
+
 require "use_cases/dsl"
-require "use_cases/errors"
-require "use_cases/validate"
 require "use_cases/stack"
 require "use_cases/params"
 require "use_cases/stack_runner"
-require "use_cases/step_result"
-require "use_cases/notifications"
-require "use_cases/prepare"
+require "use_cases/result"
 require "use_cases/step_adapters"
 require "use_cases/module_optins"
 
 module UseCase
+  extend UseCases::DSL
   extend UseCases::ModuleOptins
 
   def self.included(base)
@@ -33,7 +31,6 @@ module UseCase
       extend UseCases::ModuleOptins
 
       include UseCases::StepAdapters
-      include UseCases::Notifications
     end
   end
 
@@ -41,7 +38,6 @@ module UseCase
 
   def initialize(*)
     @stack = UseCases::Stack.new(self.class.__steps__).bind(self)
-    # self.class.bind_step_subscriptions
   end
 
   def call(params, current_user = nil)

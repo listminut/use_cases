@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
-class StepTestUseCase < UseCases::Base
+class StepTestUseCase
+  include UseCase
+
   step :do_something
 
   step :do_something_after

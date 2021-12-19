@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
-class ExternalOperation < UseCases::Base
+class ExternalOperation
+  include UseCase
+
   step :step_that_succeeds
 
   private

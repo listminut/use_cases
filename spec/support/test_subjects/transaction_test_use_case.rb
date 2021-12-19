@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
-class TransactionTestUseCase < UseCases::Base[:transactional]
+class TransactionTestUseCase
+  include UseCase[:transactional]
+
   SomeError = Class.new(StandardError)
 
   tee :run_something

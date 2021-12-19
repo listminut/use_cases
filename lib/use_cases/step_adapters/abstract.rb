@@ -6,16 +6,6 @@ module UseCases
   module StepAdapters
     class Abstract
       include Dry::Monads
-
-      # include Dry::Events::Publisher[name || object_id]
-
-      # def self.inherited(subclass)
-      #   super
-      #   subclass.register_event(:step)
-      #   subclass.register_event(:step_succeeded)
-      #   subclass.register_event(:step_failed)
-      # end
-
       include Dry::Monads[:result]
 
       attr_reader :name, :object, :failure, :options
@@ -31,22 +21,11 @@ module UseCases
       end
 
       def call(*args)
-        around_call(name, args: args) do
-          before_call(name, args: args)
-
-          result = StepResult.new(self, do_call(*args))
-
-          if result.success?
-            after_call_success(name, args: args, value: result.value)
-          else
-            after_call_failure(name, args: args, value: result.value)
-          end
-
-          result
-        end
+        UseCases::Result.new(self, do_call(*args))
       end
 
       def do_call(*args)
+        args = callable_args(args)
         callable_proc.call(*args)
       end
 
@@ -54,27 +33,46 @@ module UseCases
         self.class.new(name, object, options)
       end
 
+      def callable_args(args)
+        return args unless external?
+
+        case args_count
+        when 1, 2 then args.first.merge(user: args.last)
+        when 3 then args[1].merge(user: args.last, resource: args.first)
+        else args
+        end
+      end
+
       def callable_proc
         callable_object.method(callable_method).to_proc
       end
 
       def callable_object
-        case options[:with]
+        case with_option
         when NilClass, FalseClass then object
-        when String, Symbol       then object.send(options[:with])
-        else                           options[:with]
+        when Symbol               then object.send(with_option)
+        when String               then UseCases.config.container[with_option]
+        else                           with_option
         end
       end
 
       def callable_method
-        case options[:with]
+        case with_option
         when NilClass, FalseClass then name
         else                           :call
         end
       end
 
+      def with_option
+        options[:with]
+      end
+
+      def previous_input_param_name
+        options[:merge_input_as] || :input
+      end
+
       def external?
-        options[:with].present?
+        with_option.present?
       end
 
       def args_count
@@ -83,16 +81,6 @@ module UseCases
 
       def missing?
         !callable_object.respond_to?(callable_method, true)
-      end
-
-      def before_call(*args); end
-
-      def after_call_success(*args); end
-
-      def after_call_failure(*args); end
-
-      def around_call(*_args, &blk)
-        blk.call
       end
     end
   end

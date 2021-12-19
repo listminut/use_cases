@@ -13,7 +13,7 @@ RSpec.describe UseCases::StepAdapters::Try do
     allow(user).to receive(:admin?).and_return(true)
   end
 
-  context "when the try method raises the catched error" do
+  context "when the try method raises the caught error" do
     before do
       allow(subject).to receive(:do_something).and_raise(TryTestUseCase::SomeError, "some error")
     end

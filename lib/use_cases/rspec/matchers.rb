@@ -38,13 +38,15 @@ RSpec::Matchers.define(:be_failure_with) do |*expected_failure|
     expect(test_subject.failure).to eql expected_failure
   end
 
+  expected_result, expected_code = expect_failure
+
   failure_message do |test_subject|
     if test_subject.failure?
-      "the use case was expected to fail with #{expected_result.inspect} but it returned #{test_subject.failure.inspect}"
+      "the use case was expected to fail with #{expected_code} and #{expected_result.inspect} but it returned #{test_subject.failure.inspect}"
     else
       "the use case was expected to fail but it succeeded with #{test_subject.success.inspect}"
     end
-  end    
+  end
 end
 
 RSpec::Matchers.define(:be_successful_with) do |expected_result|
@@ -59,5 +61,5 @@ RSpec::Matchers.define(:be_successful_with) do |expected_result|
     else
       "the use case was expected to succeed but it failed with #{test_subject.failure.inspect}"
     end
-  end    
+  end
 end

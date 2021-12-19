@@ -11,6 +11,7 @@ require "use_cases/step_active_job_adapter"
 module UseCases
   module StepAdapters
     def self.included(base)
+      super
       base.class_eval do
         register_adapter StepAdapters::Step
         register_adapter StepAdapters::Tee

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module UseCases
-  class StepResult < Dry::Monads::Result
+  class Result < Dry::Monads::Result
     attr_reader :step, :result
 
     def initialize(step, result)
@@ -14,7 +14,7 @@ module UseCases
       return result if result_not_monad?
       return nil if result_empty?
 
-      result.success? ? result.value! : result
+      result.success? ? result.value! : result.failure
     end
     alias value! value
 
@@ -23,15 +23,15 @@ module UseCases
     end
 
     def failure?
-      value.is_a?(Dry::Monads::Result::Failure)
-    end
-
-    def failure
-      failure? && value.failure
+      result.is_a?(Dry::Monads::Result::Failure)
     end
 
     def success
       success? && value
+    end
+
+    def failure
+      failure? && value
     end
 
     def nil?
@@ -39,9 +39,7 @@ module UseCases
     end
 
     def to_result
-      value.to_result if failure?
-
-      result
+      self
     end
 
     def result_empty?
@@ -50,6 +48,14 @@ module UseCases
 
     def result_not_monad?
       !result.is_a?(Dry::Monads::Result)
+    end
+
+    def inspect
+      if failure?
+        "UseCases::Result.Failure(#{value.inspect})"
+      else
+        "UseCases::Result.Success(#{value.inspect})"
+      end
     end
   end
 end
