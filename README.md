@@ -4,17 +4,17 @@
 
 # UseCases
 
-## Currently Unstable! Use at your own risk.
+`UseCases` is a dry-ecosystem-based gem that implements a DSL for the use case pattern using the railway programming paradigm.
 
-`UseCases` is a gem based on the [dry-transaction](https://dry-rb.org/gems/dry-transaction/) DSL that implements macros commonly used internally by Ring Twice.
-
-`UseCases` does not however use `dry-transaction` behind the scenes. Instead it relies on other `dry` libraries like [dry-validation](https://dry-rb.org/gems/dry-validation/), [dry-events](https://dry-rb.org/gems/dry-validation/) and [dry-monads](https://dry-rb.org/gems/dry-validation/) to implement a DSL that can be flexible enough for our needs.
+It's concept is largely based on `dry-transaction` but does not use it behind the scenes. Instead it relies on other `dry` libraries like [dry-validation](https://dry-rb.org/gems/dry-validation/), [dry-events](https://dry-rb.org/gems/dry-validation/) and [dry-monads](https://dry-rb.org/gems/dry-validation/) to implement a DSL that can be flexible enough for your needs.
 
 ## Why `UseCases` came about:
 
 1. It allows you to use `dry-validation` without much gymastics.
 2. It abstracts common steps like **authorization** and **validation** into macros.
 3. It solves what we consider a problem of `dry-transaction`. The way it funnels down `input` through `Dry::Monads` payloads alone. `UseCases` offers more flexibility in a way that still promotes functional programming values.
+4. It implements a simple pub/sub mechanism which can be async when `ActiveJob` is a project dependency.
+5. It implements an `enqueue` mechanism to delay execution of steps, also using `ActiveJob` as a dependency.
 
 ## Installation
 
@@ -34,7 +34,7 @@ Or install it yourself as:
 
 ## Usage
 
-To fully understand `UseCases`, make sure to read [dry-transaction](https://dry-rb.org/gems/dry-transaction/0.13/)'s documentation first.
+To get a good basis to get started on `UseCases`, make sure to read [dry-transaction](https://dry-rb.org/gems/dry-transaction/0.13/)'s documentation first.
 
 ### Validations
 
@@ -48,7 +48,13 @@ https://dry-rb.org/gems/dry-transaction/0.13/step-adapters/
 
 ```ruby
 class YourCase < UseCases::Base
-  params {}
+  params do
+    required(:some_param).filled(:string)
+  end
+
+  rule(:some_param) do
+    key.failure "too long" if value.length > 40
+  end
 
   step :do_something
 
