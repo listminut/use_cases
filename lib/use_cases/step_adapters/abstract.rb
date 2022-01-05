@@ -35,18 +35,22 @@ module UseCases
       end
 
       def callable_args(args)
-        return args unless external? && selects_external_args?
+        if callable_args_count > args.count
+          raise StepArgumentError,
+                "##{step.name} expects #{expected_args_count} arguments it only received #{step_args.count}, make sure your previous step Success() statement has a payload."
+        end
 
-        hashed_args(args).slice(*options[:pass]).values
+        return args.first(callable_args_count) unless external? && selects_external_args?
+
+        hashed_args(args)
       end
 
       def hashed_args(args)
-        case args.length
-        when 0 then {}
-        when 1 then args.first
-        when 2 then { params: args.first, current_user: args.last }
-        when 3 then { params: args.first, current_user: args.last, previous_step_result: args.last }
-        end
+        {
+          params: args.first,
+          current_user: args.last,
+          previous_step_result: args.last
+        }.slice(pass_option)
       end
 
       def callable_proc
@@ -73,6 +77,10 @@ module UseCases
         options[:with]
       end
 
+      def pass_option
+        options[:pass]
+      end
+
       def previous_input_param_name
         options[:merge_input_as] || :input
       end
@@ -82,7 +90,7 @@ module UseCases
       end
 
       def selects_external_args?
-        options[:pass].present?
+        pass_option.present?
       end
 
       def callable_args_count
