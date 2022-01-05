@@ -27,7 +27,7 @@ module UseCases
 
     def _run_step(stack, args)
       step = stack.current_step
-      expected_args_count = step.args_count
+      expected_args_count = step.callable_args_count
       step_args = _assert_step_arguments_with_count(stack, args)
 
       raise MissingStepError, "Missing ##{step.name} implementation." if step.missing?
@@ -41,7 +41,7 @@ module UseCases
     end
 
     def _assert_step_arguments_with_count(stack, args)
-      step_args_count = stack.current_step.args_count
+      step_args_count = stack.current_step.callable_args_count
 
       if _should_prepend_previous_step_result_to_args?(stack)
         prev_step_result_value = stack.previous_step_value

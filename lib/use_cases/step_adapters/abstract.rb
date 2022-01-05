@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "dry/monads/all"
+require "byebug"
 
 module UseCases
   module StepAdapters
@@ -24,8 +25,8 @@ module UseCases
         UseCases::Result.new(self, do_call(*args))
       end
 
-      def do_call(*args)
-        args = callable_args(args)
+      def do_call(*initial_args)
+        args = callable_args(initial_args)
         callable_proc.call(*args)
       end
 
@@ -34,12 +35,17 @@ module UseCases
       end
 
       def callable_args(args)
-        return args unless external?
+        return args unless external? && selects_external_args?
 
-        case args_count
-        when 1, 2 then args.first.merge(user: args.last)
-        when 3 then args[1].merge(user: args.last, resource: args.first)
-        else args
+        hashed_args(args).slice(*options[:pass]).values
+      end
+
+      def hashed_args(args)
+        case args.length
+        when 0 then {}
+        when 1 then args.first
+        when 2 then { params: args.first, current_user: args.last }
+        when 3 then { params: args.first, current_user: args.last, previous_step_result: args.last }
         end
       end
 
@@ -75,7 +81,11 @@ module UseCases
         with_option.present?
       end
 
-      def args_count
+      def selects_external_args?
+        options[:pass].present?
+      end
+
+      def callable_args_count
         callable_proc.parameters.count
       end
 
