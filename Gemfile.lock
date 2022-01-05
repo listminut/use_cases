@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    use_cases (1.0.2)
+    use_cases (1.0.5)
       activesupport
       dry-events
       dry-matcher

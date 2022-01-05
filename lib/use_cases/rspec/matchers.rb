@@ -38,7 +38,7 @@ RSpec::Matchers.define(:be_failure_with) do |*expected_failure|
     expect(test_subject.failure).to eql expected_failure
   end
 
-  expected_result, expected_code = expect_failure
+  expected_result, expected_code = expected_failure
 
   failure_message do |test_subject|
     if test_subject.failure?
