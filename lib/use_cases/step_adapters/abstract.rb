@@ -42,7 +42,7 @@ module UseCases
 
         return args.first(callable_args_count) unless external? && selects_external_args?
 
-        hashed_args(args)
+        hashed_args(args).values
       end
 
       def hashed_args(args)
