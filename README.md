@@ -68,11 +68,16 @@ By taking a simple look at the definition of a use case, anyone should be able t
 |  | Rationale for use | Accepted Options | Expected return | Passes return value |
 |---|---|---|---|---|
 | **step** | This step has some complexity, and it can fail or succeed. | `with`, `pass` | `Success`/ `Failure` | ✅ |
-| **check** | This step checks sets some rules for the operation, usually to check values in domain entities.  | `with`, `pass`, `failure`, `failure_message` | `boolean` | ❌ |
+| **check** | This step checks sets some rules for the operation, usually verifying that domain models fulfil some conditions.  | `with`, `pass`, `failure`, `failure_message` | `boolean` | ❌ |
 | **map** | Nothing should go wrong within this step. If it does, it's an unexpected application error. | `with`, `pass` | `any` | ✅ |
 | **try** | We expect that, in some cases, errors will occur, and the operation fails in that case. | `catch`, `with`, `pass`, `failure`, `failure_message` | `any` | ✅ |
 | **tee** | We don't care if this step succeeds or fails, it's used for non essential side effects. | `with`, `pass` | `any` | ❌ |
-| **enqueue** | The same as a tee, but executed later. | `with`, `pass`, and sidekiq options | `any` | ❌ |
+
+#### Optional steps
+
+|  | Rationale for use | Accepted Options | Expected return | Passes return value |
+|---|---|---|---|---|
+| **enqueue** | The same as a `tee`, but executed later to perform non-essential expensive operations. | `with`, `pass`, and sidekiq options | `any` | ❌ |
 | **authorize**<br> *(requires authorized) | Performs authorization on the current user, by running a  `check` which, in case of failure, always returns an `unauthorized` failure. | `with`, `pass`, `failure_message` | `boolean` | ❌ |
 | **prepare**<br> *(requires prepared) | Adds a `tee` step that always runs first. Used to mutate params if necessary. | `with`, `pass` | `any` | ❌ |
 
