@@ -8,33 +8,35 @@
 
 It's concept is largely based on `dry-transaction` but does not use it behind the scenes. Instead it relies on other `dry` libraries like [dry-validation](https://dry-rb.org/gems/dry-validation/), [dry-events](https://dry-rb.org/gems/dry-validation/) and [dry-monads](https://dry-rb.org/gems/dry-validation/) to implement a DSL that can be flexible enough for your needs.
 
-## Why `UseCases` came about:
+### Including UseCase
 
-1. It allows you to use `dry-validation` without much gymastics.
-2. It abstracts common steps like **authorization** and **validation** into macros.
-3. It solves what we consider a problem of `dry-transaction`. The way it funnels down `input` through `Dry::Monads` payloads alone. `UseCases` offers more flexibility in a way that still promotes functional programming values.
-4. It implements a simple pub/sub mechanism which can be async when `ActiveJob` is a project dependency.
-5. It implements an `enqueue` mechanism to delay execution of steps, also using `ActiveJob` as a dependency.
-
-## Installation
-
-Add this line to your application's Gemfile:
+Including the `UseCase` module ensures that your class implements the base use case [Base DSL](#the-base-dsl).
 
 ```ruby
-gem 'use_cases'
+class Users::Create
+  include UseCase
+end
+````
+
+In order to add optional modules (optins), use the following notation:
+
+```ruby
+class Users::Create
+  include UseCases[:validated, :transactional, :publishing]
+end
 ```
 
-And then execute:
+### The base DSL
 
-    $ bundle install
+Use cases implements a DSL similar to dry-transaction, using the [Railway programming paradigm](https://fsharpforfunandprofit.com/rop/).
 
-Or install it yourself as:
-
-    $ gem install use_cases
-
-## Usage
-
-To get a good basis to get started on `UseCases`, make sure to read [dry-transaction](https://dry-rb.org/gems/dry-transaction/0.13/)'s documentation first.
+| **macro** | accepted options | expected return | overrides input? |
+| - | - | - |
+| **step** | `with`, `pass` | `Success`/ `Failure` | ✅ |
+| **check** | `with`, `pass`, `failure`, `failure_message` | `boolean` | ❌ |
+| **map** | `with`, `pass` | `any` | ✅ |
+| **try** | `catch`, `with`, `pass`, `failure`, `failure_message` | `any` | ✅ |
+| **tee** | `with`, `pass` | `any` | ❌ |
 
 ### Validations
 
@@ -256,6 +258,26 @@ class PostsController < ApplicationController
   end
 end
 ```
+
+## Installation
+
+Add this line to your application's Gemfile:
+
+```ruby
+gem 'use_cases'
+```
+
+And then execute:
+
+    $ bundle install
+
+Or install it yourself as:
+
+    $ gem install use_cases
+
+## Usage
+
+To get a good basis to get started on `UseCases`, make sure to read [dry-transaction](https://dry-rb.org/gems/dry-transaction/0.13/)'s documentation first.
 
 ## Development
 
