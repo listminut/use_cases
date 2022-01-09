@@ -77,12 +77,49 @@ By taking a simple look at the definition of a use case, anyone should be able t
 
 |  | Rationale for use | Accepted Options | Expected return | Passes return value |
 |---|---|---|---|---|
-| **enqueue** *(requires ActiveJob to be defined) | The same as a `tee`, but executed later to perform non-essential expensive operations. | `with`, `pass`, and sidekiq options | `any` | ❌ |
+| **enqueue** *(requires ActiveJob defined) | The same as a `tee`, but executed later to perform non-essential expensive operations. | `with`, `pass`, and sidekiq options | `any` | ❌ |
 | **authorize**<br> *(requires authorized) | Performs authorization on the current user, by running a  `check` which, in case of failure, always returns an `unauthorized` failure. | `with`, `pass`, `failure_message` | `boolean` | ❌ |
 | **prepare**<br> *(requires prepared) | Adds a `tee` step that always runs first. Used to mutate params if necessary. | `with`, `pass` | `any` | ❌ |
 
 
+### Defining a step
 
+Defining a step can be done in the body of the use case.
+
+```ruby
+class Users::DeleteAccount
+  include UseCases[:validated, :transactional, :publishing, :validated]
+
+  params do
+    required(:id).filled(:str?)
+  end
+
+  authorize :user_owns_account?, failure_message: 'Cannot delete account'
+  try :load_account, catch: ActiveRecord::RecordNotFound, failure: :account_not_found, failure_message: 'Account not found'
+  map :delete_account, publish: :account_deleted
+  enqueue :send_farewell_email
+
+  private 
+
+  def user_owns_account?(_previous_step_input, params, current_user)
+    current_user.account_id == params[:id]
+  end
+
+  def load_account(_previous_step_input, params, _current_user)
+    Account.find_by!(user_id: params[:id])
+  end
+
+  def delete_account(account, _params, _current_user)
+    account.destroy!
+  end
+
+  # since this executed async, all args are serialized
+  def send_farewell_email(account_attrs, params, current_user_attrs)
+    user = User.find(params[:id])
+    UserMailer.farewell(user).deliver_now!
+  end
+end
+```
 
 #### Available Options
 
