@@ -77,7 +77,7 @@ By taking a simple look at the definition of a use case, anyone should be able t
 
 |  | Rationale for use | Accepted Options | Expected return | Passes return value |
 |---|---|---|---|---|
-| **enqueue** | The same as a `tee`, but executed later to perform non-essential expensive operations. | `with`, `pass`, and sidekiq options | `any` | ❌ |
+| **enqueue** *(requires ActiveJob to be defined) | The same as a `tee`, but executed later to perform non-essential expensive operations. | `with`, `pass`, and sidekiq options | `any` | ❌ |
 | **authorize**<br> *(requires authorized) | Performs authorization on the current user, by running a  `check` which, in case of failure, always returns an `unauthorized` failure. | `with`, `pass`, `failure_message` | `boolean` | ❌ |
 | **prepare**<br> *(requires prepared) | Adds a `tee` step that always runs first. Used to mutate params if necessary. | `with`, `pass` | `any` | ❌ |
 
