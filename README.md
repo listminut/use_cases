@@ -22,7 +22,7 @@ In order to add optional modules (optins), use the following notation:
 
 ```ruby
 class Users::Create
-  include UseCases[:validated, :transactional, :publishing]
+  include UseCase[:validated, :transactional, :publishing]
 end
 ```
 
