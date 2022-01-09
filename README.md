@@ -123,13 +123,13 @@ end
 
 #### Available Options
 
-| Name | Description | Expects |
+| Name | Description | Expected Usage |
 |---|---|---|
 | `with` | Retrieves the callable object used to perform the step. |<em><br> Symbol: `send(options[:with])` <br> String: `UseCases.config.container[options[:with]]` <br> Class: `options[:with]`</em>  |
-| `pass` | An array of the arguments to pass to the object set by `with`. <br> _options: params, current_user & previous_step_result_ | Array\<Symbol> 
-| `failure` | The code passed to the Failure object. |
-| `failure_message` | The string message passed to the Failure object. |
-| `catch` | Array of error classes to rescue from. |
+| `pass` | An array of the arguments to pass to the object set by `with`. <br> _options: params, current_user & previous_step_result_ | Array\<Symbol> |
+| `failure` | The code passed to the Failure object. | Symbol / String |
+| `failure_message` | The string message passed to the Failure object. | Symbol / String | 
+| `catch` | Array of error classes to rescue from. | Array\<Exception>
 
 <br>
 
