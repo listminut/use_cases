@@ -26,18 +26,73 @@ class Users::Create
 end
 ```
 
+### Using a UseCase
+
+```ruby
+create_user = Users::Create.new
+params = { first_name: 'Don', last_name: 'Quixote' }
+
+result = create_user.call(params, current_user)
+
+# Checking if succeeded
+result.success?
+
+# Checking if failed
+result.failure?
+
+# Getting return value
+result.value!
+```
+
+### Available Optins
+
+
+| Optin | Description |
+|---|---|
+| `:authorized` | Adds an extra `authorize` step macro, used to check user permissions. |
+| `:prepared` | Adds an extra `prepare` step macro, used to run some code before the use case runs. |
+| `:publishing` | Adds extra extra `publish` option to all steps, which allows a step to broadcast an event after executing | 
+| `:transactional` | Calls `#transaction` on a given `transaction_handler` object around the use case execution |
+| `:validated` | Adds all methods of `dry-transaction` to the use case DSL, which run validations on the received `params` object. | 
+
 ### The base DSL
 
 Use cases implements a DSL similar to dry-transaction, using the [Railway programming paradigm](https://fsharpforfunandprofit.com/rop/).
 
-| **macro** | accepted options | expected return | overrides input? |
-| - | - | - |
-| **step** | `with`, `pass` | `Success`/ `Failure` | ✅ |
-| **check** | `with`, `pass`, `failure`, `failure_message` | `boolean` | ❌ |
-| **map** | `with`, `pass` | `any` | ✅ |
-| **try** | `catch`, `with`, `pass`, `failure`, `failure_message` | `any` | ✅ |
-| **tee** | `with`, `pass` | `any` | ❌ |
 
+Each step macro has a different use case, and so a different subset of available options, different expectations in return values, and interaction with the following step.
+
+By taking a simple look at the definition of a use case, anyone should be able to understand the business rules it emcompasses. For that it is necessary to understand the following matrix.
+
+
+|  | Rationale for use | Accepted Options | Expected return | Passes return value |
+|---|---|---|---|---|
+| **step** | This step has some complexity, and it can fail or succeed. | `with`, `pass` | `Success`/ `Failure` | ✅ |
+| **check** | This step checks sets some rules for the operation, usually to check values in domain entities.  | `with`, `pass`, `failure`, `failure_message` | `boolean` | ❌ |
+| **map** | Nothing should go wrong within this step. If it does, it's an unexpected application error. | `with`, `pass` | `any` | ✅ |
+| **try** | We expect that, in some cases, errors will occur, and the operation fails in that case. | `catch`, `with`, `pass`, `failure`, `failure_message` | `any` | ✅ |
+| **tee** | We don't care if this step succeeds or fails, it's used for non essential side effects. | `with`, `pass` | `any` | ❌ |
+| **enqueue** | The same as a tee, but executed later. | `with`, `pass`, and sidekiq options | `any` | ❌ |
+| **authorize**<br> *(requires authorized) | Performs authorization on the current user, by running a  `check` which, in case of failure, always returns an `unauthorized` failure. | `with`, `pass`, `failure_message` | `boolean` | ❌ |
+| **prepare**<br> *(requires prepared) | Adds a `tee` step that always runs first. Used to mutate params if necessary. | `with`, `pass` | `any` | ❌ |
+
+
+
+
+#### Available Options
+
+| Name | Description |
+|---|---|
+| `with` | Retrieves the callable object used to perform the step. |
+| `pass` | An array of the arguments to pass to the object set by `with`. <br> _options: params, current_user & previous_step_result_|
+| `failure` | The code passed to the Failure object. |
+| `failure_message` | The string message passed to the Failure object. |
+| `catch` | Array of error classes to rescue from. |
+
+<br>
+
+### Using `options[:with]`
+ <em><br> Symbol: `send(options[:with])` <br> String: `UseCases.config.container[options[:with]]` <br> Class: `options[:with]`</em> 
 ### Validations
 
 See [dry-validation](https://dry-rb.org/gems/dry-validation/)
