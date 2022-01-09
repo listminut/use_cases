@@ -82,9 +82,18 @@ By taking a simple look at the definition of a use case, anyone should be able t
 | **prepare**<br> *(requires prepared) | Adds a `tee` step that always runs first. Used to mutate params if necessary. | `with`, `pass` | `any` | ❌ |
 
 
-### Defining a step
+### Defining Steps
 
 Defining a step can be done in the body of the use case.
+
+```ruby
+class Users::DeleteAccount
+  include UseCases[:validated, :transactional, :publishing, :validated]
+
+  step :do_something, {}
+```
+
+In real life, a simple use case would look something like:
 
 ```ruby
 class Users::DeleteAccount
