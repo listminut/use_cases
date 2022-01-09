@@ -44,6 +44,23 @@ result.failure?
 result.value!
 ```
 
+Or with using dry-matcher by passing a block:
+
+```ruby
+create_user = Users::Create.new
+params = { first_name: 'Don', last_name: 'Quixote' }
+
+create_user.call(params, current_user) do |on|
+  on.success do |user|
+    puts "#{user.first_name} created!"
+  end
+
+  on.failure do |(code, message)|
+    puts "Failure (#{code}): #{message}"
+  end
+end
+```
+
 ### Available Optins
 
 
