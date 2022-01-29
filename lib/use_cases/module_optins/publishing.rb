@@ -35,12 +35,11 @@ module UseCases
             return_value: step_result.value!,
             params: args[-2],
             current_user: args[-1]
-          }.transform_values(&:to_json)
+          }
         end
 
         def extract_event_key(step_result)
-          publish_key = options[:publish].to_s
-          publish_key += step_result.success? ? ".success" : ".failure"
+          options[:publish].to_s + step_result.success? ? ".success" : ".failure"
         end
       end
     end
