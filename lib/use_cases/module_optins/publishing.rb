@@ -9,35 +9,38 @@ module UseCases
     module Publishing
       def self.included(base)
         super
-        base.prepend DoCallPatch
+        StepAdapters::Abstract.prepend StepCallPatch
       end
 
-      module DoCallPatch
-        def do_call(*args)
-          super(*args, method(:publish_step_result).to_proc)
+      module StepCallPatch
+        def call(*args)
+          super(*args).tap do |result|
+            publish_step_result(result, args)
+          end
         end
 
-        def publish_step_result(step_result, step_object)
-          publish_key = step_object.options[:publish]
+        def publish_step_result(step_result, args)
+          return unless options[:publish]
+
+          key = extract_event_key(step_result)
+          payload = extract_payload(step_result, args)
+
+          UseCases.publisher.register_and_publish_event(key, payload)
+        end
+
+        private
+
+        def extract_payload(step_result, args)
+          {
+            return_value: step_result.value!,
+            params: args[-2],
+            current_user: args[-1]
+          }.transform_values(&:to_json)
+        end
+
+        def extract_event_key(step_result)
+          publish_key = options[:publish].to_s
           publish_key += step_result.success? ? ".success" : ".failure"
-          payload = step_result.value!
-          return unless publish_key
-
-          register_event(publish_key)
-          peform_publish(publish_key, payload)
-        end
-
-        def register_event(publish_key)
-          return if UseCases.publisher.class.events[publish_key]
-
-          UseCases.publisher.class.register_event(publish_key)
-        end
-
-        def peform_publish(publish_key, payload)
-          UseCases.publisher.publish(publish_key, payload)
-          return unless defined? UseCases::Events::PublishJob
-
-          UseCases::Events::PublishJob.perform_later(publish_key, payload.to_json)
         end
       end
     end

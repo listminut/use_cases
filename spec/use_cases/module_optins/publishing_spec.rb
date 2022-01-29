@@ -2,11 +2,12 @@
 
 require "spec_helper"
 require "support/test_subjects/events_test_use_case"
+require "support/test_subjects/test_subscriber"
 
 RSpec.describe UseCases::ModuleOptins::Publishing do
   subject { EventsTestUseCase.new }
 
-  let(:params) { { params: "params" } }
+  let(:params) { { foo: "bar" } }
   let(:user) { double("user") }
   let(:payload) { double("payload") }
   let(:result) { double("result", success?: true, value!: payload) }
@@ -26,19 +27,31 @@ RSpec.describe UseCases::ModuleOptins::Publishing do
       allow(user).to receive(:admin?).and_return(true)
     end
 
-    it "publishes an event for each step" do
-      expect(UseCases.publisher).to receive(:publish).with("events.step.success", params)
-      expect(UseCases.publisher).to receive(:publish).with("events.try.failure", [nil, ""])
-      subject.call(params, user)
-    end
-
     context "when active jobs is defined" do
       it "published an async event for each step" do
-        expect(UseCases::Events::PublishJob).to receive(:perform_later).with("events.step.success", params.to_json)
-        expect(UseCases::Events::PublishJob).to receive(:perform_later).with("events.try.failure", [nil, ""].to_json)
+        expect(UseCases::Events::PublishJob).to receive(:perform_later).with("events.step.success", {
+          return_value: "result".to_json,
+          params: params.to_json,
+          current_user: user.to_json
+        })
+        expect(UseCases::Events::PublishJob).to receive(:perform_later).with("events.try.failure", {
+          return_value: [:failed, "Failed"].to_json,
+          params: params.to_json,
+          current_user: user.to_json
+        })
 
         subject.call(params, user)
       end
+    end
+  end
+
+  context "when there are subscribers to the event" do
+    it "subscribes to the event" do
+      test_subscriber = TestSubscriber.new
+      expect(TestSubscriber).to receive(:new).and_return(test_subscriber).twice
+      expect(test_subscriber).to receive(:on_events_step_success)
+      expect(test_subscriber).to receive(:on_events_try_failure)
+      subject.call(params, user)
     end
   end
 end

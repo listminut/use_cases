@@ -17,8 +17,6 @@ module UseCases
     def do_call(*args)
       stack.call do
         result = _run_step(stack, args)
-        args.last.call(result, stack.current_step) if args.last.is_a? Proc
-
         return result if result.failure?
 
         result
