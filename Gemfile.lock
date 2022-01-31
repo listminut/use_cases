@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    use_cases (1.0.10)
+    use_cases (1.0.12)
       activesupport
       dry-events
       dry-matcher
@@ -126,4 +126,4 @@ DEPENDENCIES
   use_cases!
 
 BUNDLED WITH
-   2.2.25
+   2.2.28
