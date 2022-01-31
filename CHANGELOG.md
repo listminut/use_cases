@@ -2,7 +2,7 @@
 
 ## [1.0.1] - 2021-12-19
 
-- Async published events are now suffixed by `".aync"`
+- Async published events are now suffixed by `".async"`
 
 ## [1.0.0] - 2021-12-19
 
