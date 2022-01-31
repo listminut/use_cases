@@ -15,6 +15,6 @@ module UseCases
   extend Dry::Configurable
 
   setting :container, reader: true
-  setting :publisher, ::UseCases::Events::Publisher, reader: true
-  setting :subscribers, [], reader: true
+  setting :publisher, default: ::UseCases::Events::Publisher, reader: true
+  setting :subscribers, default: [], reader: true
 end
