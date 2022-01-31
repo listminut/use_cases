@@ -39,7 +39,7 @@ module UseCases
         end
 
         def extract_event_key(step_result)
-          options[:publish].to_s + step_result.success? ? ".success" : ".failure"
+          options[:publish].to_s + (step_result.success? ? ".success" : ".failure")
         end
       end
     end

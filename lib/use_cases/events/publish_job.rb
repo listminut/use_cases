@@ -6,7 +6,7 @@ module UseCases
     class PublishJob < ActiveJob::Base
       def perform(publish_key, payload)
         publish_key += ".async"
-        UseCases.publisher.publish(publish_key, payload)
+        UseCases.publisher.register_and_publish_event(publish_key, payload)
       end
     end
   end
