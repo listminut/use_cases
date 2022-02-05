@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require "byebug"
 require "spec_helper"
 require "support/test_subjects/events_test_use_case"
 require "support/test_subjects/test_subscriber"
