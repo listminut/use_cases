@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "byebug"
 require "spec_helper"
 require "support/test_subjects/events_test_use_case"
 require "support/test_subjects/test_subscriber"
@@ -48,7 +49,7 @@ RSpec.describe UseCases::ModuleOptins::Publishing do
   context "when there are subscribers to the event" do
     it "subscribes to the event" do
       test_subscriber = TestSubscriber.new
-      expect(TestSubscriber).to receive(:new).and_return(test_subscriber).twice
+      expect(UseCases).to receive(:subscribers).and_return([test_subscriber]).at_least(:once)
       expect(test_subscriber).to receive(:on_events_step_success)
       expect(test_subscriber).to receive(:on_events_try_failure)
       subject.call(params, user)

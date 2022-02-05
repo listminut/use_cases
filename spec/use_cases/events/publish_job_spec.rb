@@ -16,6 +16,8 @@ RSpec.describe 'testing the job' do
       stub_const("ActiveJob", Module.new)
       stub_const("ActiveJob::Base", Class.new)
 
+      allow(ActiveJob::Base).to receive(:perform_later)
+
       load "use_cases/events/publish_job.rb"
     end
 

@@ -85,11 +85,11 @@ module UseCases
       end
 
       def external?
-        with_option.present?
+        !with_option.nil?
       end
 
       def selects_external_args?
-        pass_option.present?
+        !pass_option.nil?
       end
 
       def callable_args_count
