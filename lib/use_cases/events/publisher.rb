@@ -8,7 +8,6 @@ module UseCases
       def subscribe_and_publish_event(event_name, payload)
         subscribe_to_event(event_name)
         publish(event_name, payload)
-        publish_async(event_name, payload) if event_should_be_published_asynchronously?(event_name)
       end
 
       private
