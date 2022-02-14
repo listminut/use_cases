@@ -16,7 +16,7 @@ module UseCases
 
       def publish(event_name, payload)
         super
-        PublishJob.perform_later(event_name, payload)
+        PublishJob.perform_later(event_name, payload) if defined?(PublishJob)
       end
     end
   end
