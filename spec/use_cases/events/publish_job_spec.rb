@@ -3,9 +3,7 @@
 require "spec_helper"
 require "support/test_subjects/events_test_use_case"
 
-
-
-RSpec.describe 'testing the job' do
+RSpec.describe "testing the job" do
   subject { ::UseCases::Events::PublishJob.new }
 
   let(:event_key) { "event_key" }
@@ -23,7 +21,7 @@ RSpec.describe 'testing the job' do
 
     it "publishes an event for each step" do
       expect(UseCases.publisher).to receive(:publish).with("event_key.async", payload)
-      
+
       subject.perform(event_key, payload)
     end
   end

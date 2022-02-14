@@ -32,15 +32,15 @@ RSpec.describe UseCases::ModuleOptins::Publishing do
     context "when active jobs is defined" do
       it "published an async event for each step" do
         expect(UseCases::Events::PublishJob).to receive(:perform_later).with("events.step.success", {
-          return_value: "result",
-          params: params,
-          current_user: user
-        })
+                                                                               return_value: "result",
+                                                                               params: params,
+                                                                               current_user: user
+                                                                             })
         expect(UseCases::Events::PublishJob).to receive(:perform_later).with("events.try.failure", {
-          return_value: [:failed, "Failed"],
-          params: params,
-          current_user: user
-        })
+                                                                               return_value: [:failed, "Failed"],
+                                                                               params: params,
+                                                                               current_user: user
+                                                                             })
 
         subject.call(params, user)
       end
@@ -55,4 +55,3 @@ RSpec.describe UseCases::ModuleOptins::Publishing do
     end
   end
 end
- 

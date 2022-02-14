@@ -17,10 +17,10 @@ module UseCases
           failure: :unauthorized,
           failure_message: "Not Authorized",
           merge_input_as: :resource
-        }
+        }.freeze
 
         def authorize(name, options = {})
-          options = DEFAULT_OPTIONS.merge(options)       
+          options = DEFAULT_OPTIONS.merge(options)
 
           check name, options
         end

@@ -3,6 +3,7 @@
 require "use_cases/events/publisher"
 require "use_cases/events/subscriber"
 require "use_cases/events/publish_job"
+require "use_cases/events/event_registry"
 
 module UseCases
   module ModuleOptins
@@ -15,7 +16,10 @@ module UseCases
       module StepPatch
         def initialize(*)
           super
-          finalize_subscriptions!
+          %w[success failure].map do |event_type|
+            event_id = [options[:publish], event_type].join(".")
+            Events::EventRegistry.register(event_id)
+          end
         end
 
         def call(*args)
@@ -31,26 +35,6 @@ module UseCases
           payload = extract_payload(step_result, args)
 
           UseCases.publisher.publish(key, payload)
-        end
-
-
-        def finalize_subscriptions!
-          event_ids.each do |event_id|
-            listener_name = ['on', event_id].join('_').gsub('.', '_')
-            UseCases.publisher.register_event(event_id)
-
-            UseCases.subscribers.each do |subscriber|
-              next if !subscriber.respond_to?(listener_name) || UseCases.publisher.subscribed?(subscriber.method(listener_name))
-
-              UseCases.publisher.subscribe(subscriber)
-            end
-          end
-        end
-
-        def event_ids
-          %w[success failure success.async failure.async].map do |event_type|
-            [options[:publish], event_type].join('.')
-          end
         end
 
         private

@@ -29,7 +29,7 @@ RSpec::Matchers.define(:be_failure_with_payload) do |expected_result|
     else
       "the use case was expected to fail but it succeeded with #{test_subject.success.inspect}"
     end
-  end  
+  end
 end
 
 RSpec::Matchers.define(:be_failure_with) do |*expected_failure|

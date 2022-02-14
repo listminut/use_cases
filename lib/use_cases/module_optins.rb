@@ -16,7 +16,7 @@ module UseCases
       validated: Validated,
       prepared: Prepared,
       publishing: Publishing
-    }
+    }.freeze
 
     def [](*options)
       modules = [self]

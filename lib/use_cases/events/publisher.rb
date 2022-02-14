@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "dry/events/publisher"
 
 module UseCases
@@ -16,7 +18,7 @@ module UseCases
 
       def publish(event_name, payload)
         super
-        PublishJob.perform_later(event_name, payload) if defined?(PublishJob)
+        PublishJob.perform_later(event_name, payload) if defined?(PublishJob) && !event_name.to_s.end_with?(".async")
       end
     end
   end

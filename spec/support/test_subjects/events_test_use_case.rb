@@ -9,11 +9,11 @@ class EventsTestUseCase
 
   private
 
-  def do_something(params, user)
+  def do_something(_params, _user)
     "result"
   end
 
-  def do_something_else(do_something_result, params, user)
+  def do_something_else(_do_something_result, _params, _user)
     raise
   end
 end
