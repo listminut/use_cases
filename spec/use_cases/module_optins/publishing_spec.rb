@@ -23,7 +23,7 @@ RSpec.describe UseCases::ModuleOptins::Publishing do
     allow(UseCases).to receive(:subscribers).and_return([subscriber])
   end
 
-  context "when it raises an error caught by the transaction", skip: true do
+  context "when it raises an error caught by the transaction" do
     before do
       allow(result).to receive(:is_a?).with(Dry::Monads::Result).and_return(true)
       allow(user).to receive(:admin?).and_return(true)
@@ -31,7 +31,6 @@ RSpec.describe UseCases::ModuleOptins::Publishing do
 
     context "when active jobs is defined" do
       it "published an async event for each step" do
-        pending('Fix async event publishing')
         expect(UseCases::Events::PublishJob).to receive(:perform_later).with("events.step.success", {
           return_value: "result",
           params: params,
