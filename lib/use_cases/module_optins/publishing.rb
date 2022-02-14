@@ -48,13 +48,15 @@ module UseCases
         end
 
         def event_ids
-          ['success', 'failure', 'success.async', 'failure.async'].map do |event_type|
+          %w[success failure success.async failure.async].map do |event_type|
             [options[:publish], event_type].join('.')
           end
         end
 
         # This is a hack waiting for this https://github.com/dry-rb/dry-events/pull/15 to be merged
         def subscribed?(subscriber, listener_name)
+          return UseCases.publisher.subscribed?(subscriber.method(listener_name)) unless UseCases.publisher.is_a?(::Dry::Events::Publisher)
+
           UseCases.publisher.__bus__.listeners.values.any? do |value|
             value.any? do |block, _|
               block.owner == subscriber.method(listener_name).owner && block.name.to_sym == listener_name.to_sym
