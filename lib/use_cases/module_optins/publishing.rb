@@ -55,7 +55,7 @@ module UseCases
 
         # This is a hack waiting for this https://github.com/dry-rb/dry-events/pull/15 to be merged
         def subscribed?(subscriber, listener_name)
-          return UseCases.publisher.subscribed?(subscriber.method(listener_name)) unless UseCases.publisher.is_a?(::Dry::Events::Publisher)
+          return UseCases.publisher.subscribed?(subscriber.method(listener_name)) unless UseCases.publisher.respond_to?(:__bus__)
 
           UseCases.publisher.__bus__.listeners.values.any? do |value|
             value.any? do |block, _|
