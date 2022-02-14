@@ -13,6 +13,11 @@ module UseCases
           end
         end
       end
+
+      def publish(event_name, payload)
+        super
+        PublishJob.perform_later(event_name, payload)
+      end
     end
   end
 end
