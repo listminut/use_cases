@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    use_cases (1.0.12)
+    use_cases (1.0.15)
       activesupport
       dry-events
       dry-matcher
@@ -110,6 +110,7 @@ GEM
 
 PLATFORMS
   x86_64-darwin-20
+  x86_64-darwin-21
   x86_64-linux
 
 DEPENDENCIES
@@ -126,4 +127,4 @@ DEPENDENCIES
   use_cases!
 
 BUNDLED WITH
-   2.2.28
+   2.2.32

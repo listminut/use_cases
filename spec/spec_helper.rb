@@ -3,6 +3,7 @@
 require "use_cases"
 require "use_cases/rspec/matchers"
 require "simplecov"
+require "byebug"
 
 SimpleCov.start
 

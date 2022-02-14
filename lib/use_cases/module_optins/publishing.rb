@@ -13,27 +13,9 @@ module UseCases
       end
 
       module StepPatch
-        def initialize(*args)
+        def initialize(*)
           super
-          return unless options[:publish] && UseCases.publisher
-
-          register_events
-        end
-
-        def register_events
-          event_names.each do |event_name|
-            next if UseCases.publisher.class.events[event_name]
-
-            UseCases.publisher.class.register_event(event_name)
-          end
-        end
-
-        def event_names
-          event_name = options[:publish]
-          [
-            "#{event_name}.success", "#{event_name}.failure",
-            "#{event_name}.success.async", "#{event_name}.failure.async"
-          ]
+          finalize_subscriptions!
         end
 
         def call(*args)
@@ -48,7 +30,36 @@ module UseCases
           key = extract_event_key(step_result)
           payload = extract_payload(step_result, args)
 
-          UseCases.publisher.subscribe_and_publish_event(key, payload)
+          UseCases.publisher.publish(key, payload)
+        end
+
+
+        def finalize_subscriptions!
+          event_ids.each do |event_id|
+            listener_name = ['on', event_id].join('_').gsub('.', '_')
+            UseCases.publisher.register_event(event_id)
+
+            UseCases.subscribers.each do |subscriber|
+              next if !subscriber.respond_to?(listener_name) || subscribed?(subscriber, listener_name)
+
+              UseCases.publisher.subscribe(subscriber)
+            end
+          end
+        end
+
+        def event_ids
+          ['success', 'failure', 'success.async', 'failure.async'].map do |event_type|
+            [options[:publish], event_type].join('.')
+          end
+        end
+
+        # This is a hack waiting for this https://github.com/dry-rb/dry-events/pull/15 to be merged
+        def subscribed?(subscriber, listener_name)
+          UseCases.publisher.__bus__.listeners.values.any? do |value|
+            value.any? do |block, _|
+              block.owner == subscriber.method(listener_name).owner && block.name.to_sym == listener_name.to_sym
+            end
+          end
         end
 
         private
