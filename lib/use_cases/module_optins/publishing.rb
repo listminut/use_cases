@@ -16,6 +16,8 @@ module UseCases
       module StepPatch
         def initialize(*)
           super
+          return unless options[:publish]
+
           %w[success failure].map do |event_type|
             event_id = [options[:publish], event_type].join(".")
             Events::EventRegistry.register(event_id)

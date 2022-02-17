@@ -32,29 +32,36 @@ module UseCases
         def params(*args, &blk)
           _setup_validation
 
-          _contract_class.params(*args, &blk)
+          _contract_class.params(*args, &block_with_config(&blk))
         end
 
         def schema(*args, &blk)
           _setup_validation
 
-          _contract_class.schema(*args, &blk)
+          _contract_class.schema(*args, &block_with_config(&blk))
         end
 
         def rule(*args, &blk)
           _setup_validation
 
-          _contract_class.rule(*args, &blk)
+          _contract_class.rule(*args, &block_with_config(&blk))
         end
 
         def json(*args, &blk)
           _setup_validation
 
-          _contract_class.json(*args, &blk)
+          _contract_class.json(*args, &block_with_config(&blk))
         end
 
         def option(*args, &blk)
-          _contract_class.option(*args, &blk)
+          _contract_class.option(*args, &block_with_config(&blk))
+        end
+
+        def block_with_config(&blk)
+          Proc.new do 
+            instance_exec(&UseCases.dry_validation)
+            instance_exec(&blk) 
+          end
         end
       end
 
@@ -74,7 +81,9 @@ module UseCases
       end
 
       def contract
-        return self.class._contract_class.new if self.class._contract_class_defined?
+        return unless self.class._contract_class_defined?
+
+        self.class._contract_class.new
       end
 
       module ClassMethods
