@@ -76,7 +76,7 @@ module UseCases
           params.merge!(validation.to_h)
           Success(validation.to_h)
         else
-          Failure([:validation_error, validation.errors.to_h])
+          Failure([:validation_error, UseCases.transform_validation_errors.(validation.errors)])
         end
       end
 
