@@ -32,14 +32,12 @@ RSpec.describe UseCases::ModuleOptins::Publishing do
     context "when active jobs is defined" do
       it "published an async event for each step" do
         expect(UseCases::Events::PublishJob).to receive(:perform_later).with("events.step.success", {
-                                                                               return_value: "result",
-                                                                               params: params,
-                                                                               current_user: user
+                                                                               data: { foo: "quux" },
+                                                                               metadata: { baz: "qux" }
                                                                              })
         expect(UseCases::Events::PublishJob).to receive(:perform_later).with("events.try.failure", {
-                                                                               return_value: [:failed, "Failed"],
-                                                                               params: params,
-                                                                               current_user: user
+                                                                               data: {},
+                                                                               metadata: {}
                                                                              })
 
         subject.call(params, user)

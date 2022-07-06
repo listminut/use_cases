@@ -68,7 +68,7 @@ end
 |---|---|
 | `:authorized` | Adds an extra `authorize` step macro, used to check user permissions. |
 | `:prepared` | Adds an extra `prepare` step macro, used to run some code before the use case runs. |
-| `:publishing` | Adds extra extra `publish` option to all steps, which allows a step to broadcast an event after executing | 
+| `:publishing` | Adds extra extra `publish`, `event_data` and `event_metadata` options to all steps, which allows a step to broadcast an event after executing | 
 | `:transactional` | Calls `#transaction` on a given `transaction_handler` object around the use case execution |
 | `:validated` | Adds all methods of `dry-transaction` to the use case DSL, which run validations on the received `params` object. | 
 
@@ -122,7 +122,7 @@ class Users::DeleteAccount
 
   authorize :user_owns_account?, failure_message: 'Cannot delete account'
   try :load_account, catch: ActiveRecord::RecordNotFound, failure: :account_not_found, failure_message: 'Account not found'
-  map :delete_account, publish: :account_deleted
+  map :delete_account, publish: :account_deleted, event_data: proc { |account| { account_id: account.id } }, event_metadata: proc { { published_by: 'users.delete_account' } }
   enqueue :send_farewell_email
 
   private 

@@ -42,10 +42,10 @@ module UseCases
         private
 
         def extract_payload(step_result, args)
+          value = step_result.value!
           {
-            return_value: step_result.value!,
-            params: args[-2],
-            current_user: args[-1]
+            data: options[:event_data]&.call(value, args) || {},
+            metadata: options[:event_metadata]&.call(value, args) || {}
           }
         end
 
