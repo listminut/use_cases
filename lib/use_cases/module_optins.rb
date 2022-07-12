@@ -3,7 +3,6 @@
 require "use_cases/module_optins/prepared"
 require "use_cases/module_optins/transactional"
 require "use_cases/module_optins/validated"
-require "use_cases/module_optins/publishing"
 require "use_cases/module_optins/authorized"
 
 module UseCases
@@ -15,7 +14,6 @@ module UseCases
       transactional: Transactional,
       validated: Validated,
       prepared: Prepared,
-      publishing: Publishing
     }.freeze
 
     def [](*options)

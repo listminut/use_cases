@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+## [2.0.0] - 2022-06-12
+
+- Removes `publishing` module from the DSL.
+
 ## [1.0.1] - 2021-12-19
 
 - Async published events are now suffixed by `".async"`

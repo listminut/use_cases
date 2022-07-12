@@ -16,7 +16,6 @@ module UseCases
   extend Dry::Configurable
 
   setting :container, reader: true
-  setting :publisher, default: ::UseCases::Events::Publisher.new, reader: true
   setting :subscribers, default: [], reader: true
   setting :dry_validation, default: ->(config) {}
   setting :transform_validation_errors, default: ->(errors) { errors.to_h }, reader: true

@@ -19,16 +19,6 @@ RSpec.describe UseCases do
       end
     end
 
-    describe ".publisher" do
-      it "returns the registered publisher" do
-        UseCases.configure do |config|
-          config.publisher = SomePublisher
-        end
-
-        expect(UseCases.publisher).to eq SomePublisher
-      end
-    end
-
     describe ".dry_validation" do
       it "allows for setting default values in validated use cases" do
         UseCases.configure do |config|

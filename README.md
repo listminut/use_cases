@@ -22,7 +22,7 @@ In order to add optional modules (optins), use the following notation:
 
 ```ruby
 class Users::Create
-  include UseCase[:validated, :transactional, :publishing]
+  include UseCase[:validated, :transactional]
 end
 ```
 
@@ -68,7 +68,6 @@ end
 |---|---|
 | `:authorized` | Adds an extra `authorize` step macro, used to check user permissions. |
 | `:prepared` | Adds an extra `prepare` step macro, used to run some code before the use case runs. |
-| `:publishing` | Adds extra extra `publish`, `event_data` and `event_metadata` options to all steps, which allows a step to broadcast an event after executing | 
 | `:transactional` | Calls `#transaction` on a given `transaction_handler` object around the use case execution |
 | `:validated` | Adds all methods of `dry-transaction` to the use case DSL, which run validations on the received `params` object. | 
 
@@ -105,7 +104,7 @@ Defining a step can be done in the body of the use case.
 
 ```ruby
 class Users::DeleteAccount
-  include UseCases[:validated, :transactional, :publishing, :validated]
+  include UseCases[:validated, :transactional, :validated]
 
   step :do_something, {}
 ```
@@ -114,7 +113,7 @@ In real life, a simple use case would look something like:
 
 ```ruby
 class Users::DeleteAccount
-  include UseCases[:validated, :transactional, :publishing, :validated]
+  include UseCases[:validated, :transactional, :validated]
 
   params do
     required(:id).filled(:str?)
@@ -122,7 +121,7 @@ class Users::DeleteAccount
 
   authorize :user_owns_account?, failure_message: 'Cannot delete account'
   try :load_account, catch: ActiveRecord::RecordNotFound, failure: :account_not_found, failure_message: 'Account not found'
-  map :delete_account, publish: :account_deleted, event_data: proc { |account| { account_id: account.id } }, event_metadata: proc { { published_by: 'users.delete_account' } }
+  map :delete_account
   enqueue :send_farewell_email
 
   private 
