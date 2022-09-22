@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
   spec.description   = "A DSL to encapsulate your domain logic."
   spec.homepage      = "https://github.com/listminut/use_cases"
   spec.license       = "MIT"
-  spec.required_ruby_version = ">= 2.6.8"
+  spec.required_ruby_version = ">= 2.6.0"
 
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = "https://github.com/listminut/use_cases"
@@ -30,11 +30,10 @@ Gem::Specification.new do |spec|
   # For more information and examples about making a new gem, checkout our
   # guide at: https://bundler.io/guides/creating_gem.html
 
-  spec.add_dependency "activesupport"
-  spec.add_dependency "dry-events"
-  spec.add_dependency "dry-matcher"
-  spec.add_dependency "dry-monads"
-  spec.add_dependency "dry-validation"
+  spec.add_dependency "activesupport", ">= 5.1"
+  spec.add_dependency "dry-matcher", ">= 0.8.1"
+  spec.add_dependency "dry-monads", ">= 1.0.0"
+  spec.add_dependency "dry-validation", ">= 0.11.0"
 
   spec.add_development_dependency "byebug"
   spec.add_development_dependency "rake"

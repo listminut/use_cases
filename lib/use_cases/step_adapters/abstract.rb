@@ -38,18 +38,17 @@ module UseCases
           raise StepArgumentError,
                 "##{step.name} expects #{expected_args_count} arguments it only received #{step_args.count}, make sure your previous step Success() statement has a payload."
         end
-
         return args.first(callable_args_count) unless external? && selects_external_args?
 
         hashed_args(args).values
       end
 
-      def hashed_args(args)
+      def hashed_args((prev_result, params, current_user))
         {
-          params: args.first,
-          current_user: args.last,
-          previous_step_result: args.last
-        }.slice(pass_option)
+          previous_step_result: prev_result,
+          params: params,
+          current_user: current_user,
+        }.slice(*pass_option)
       end
 
       def callable_proc

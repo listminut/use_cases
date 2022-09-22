@@ -14,6 +14,10 @@ module UseCases
       end
     end
 
+    def remove_step(name)
+      __steps__.delete_if { |step| step.name == name }
+    end
+
     def __steps__
       @__steps__ ||= []
     end

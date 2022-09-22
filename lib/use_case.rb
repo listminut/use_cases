@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "dry/monads"
-require "dry/events"
 require "dry/monads/do"
 require "dry/monads/do/all"
 require "dry/matcher/result_matcher"

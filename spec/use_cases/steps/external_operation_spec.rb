@@ -31,7 +31,11 @@ RSpec.describe UseCases::StepAdapters::Step do
 
   context "when theres another external operation that fails" do
     before do
-      UseCaseWithExternalOperation.step :another_external_operation, with: ExternalOperationReturningMonads.new
+      UseCaseWithExternalOperation.step :foo, with: ExternalOperationReturningMonads.new
+    end
+
+    after do
+      UseCaseWithExternalOperation.remove_step :foo
     end
 
     it "fails" do
@@ -48,6 +52,34 @@ RSpec.describe UseCases::StepAdapters::Step do
       end
 
       expect(result).to eq :no_bueno
+    end
+  end
+
+  context "when theres another external operation step with a pass option" do
+    let(:external_operation) { ExternalOperation.new }
+
+    before do
+      UseCaseWithExternalOperation.step :bar, with: external_operation, pass: [:params]
+    end
+
+    after do
+      UseCaseWithExternalOperation.remove_step :bar
+    end
+
+    it "calls the external operation with the correct params" do
+      result = nil
+
+      expect(external_operation).to receive(:call).with(params).and_call_original
+
+      subject.call(params, user) do |match|
+        match.success do |value|
+          result = value
+        end
+
+        match.failure do |(code, _message)|
+          result = code
+        end
+      end
     end
   end
 end
