@@ -58,9 +58,9 @@ module UseCases
         end
 
         def block_with_config(&blk)
-          Proc.new do 
+          proc do
             instance_exec(&UseCases.dry_validation)
-            instance_exec(&blk) 
+            instance_exec(&blk)
           end
         end
       end
@@ -76,7 +76,7 @@ module UseCases
           params.merge!(validation.to_h)
           Success(validation.to_h)
         else
-          Failure([:validation_error, UseCases.transform_validation_errors.(validation.errors)])
+          Failure([:validation_error, UseCases.transform_validation_errors.call(validation.errors)])
         end
       end
 

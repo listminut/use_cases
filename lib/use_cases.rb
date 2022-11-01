@@ -23,7 +23,7 @@ module UseCases
   def self.dry_validation
     config_proc = config.dry_validation
 
-    Proc.new do 
+    proc do
       config_proc.call(config)
     end
   end

@@ -47,7 +47,7 @@ module UseCases
         {
           previous_step_result: prev_result,
           params: params,
-          current_user: current_user,
+          current_user: current_user
         }.slice(*pass_option)
       end
 

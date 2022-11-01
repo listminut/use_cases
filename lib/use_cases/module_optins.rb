@@ -4,6 +4,7 @@ require "use_cases/module_optins/prepared"
 require "use_cases/module_optins/transactional"
 require "use_cases/module_optins/validated"
 require "use_cases/module_optins/authorized"
+require "use_cases/module_optins/locked"
 
 module UseCases
   module ModuleOptins
@@ -14,6 +15,7 @@ module UseCases
       transactional: Transactional,
       validated: Validated,
       prepared: Prepared,
+      locked: Locked
     }.freeze
 
     def [](*options)
