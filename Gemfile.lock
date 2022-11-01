@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    use_cases (2.0.4)
+    use_cases (2.0.5)
       activesupport (>= 5.1)
       dry-matcher (>= 0.8.1)
       dry-monads (>= 1.0.0)

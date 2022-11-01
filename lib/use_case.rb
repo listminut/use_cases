@@ -45,7 +45,6 @@ module UseCase
   private
 
   def do_call(*args)
-    byebug
     UseCases::StackRunner.new(stack).call(*args)
   end
 end
