@@ -24,7 +24,10 @@ module UseCases
     config_proc = config.dry_validation
 
     proc do
-      config_proc.call(config)
+      begin
+        config_proc.call(config)
+      rescue Dry::Configurable::FrozenConfig
+      end
     end
   end
 end
