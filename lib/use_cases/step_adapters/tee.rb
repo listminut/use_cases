@@ -8,7 +8,7 @@ module UseCases
       class InvalidReturnValue < StandardError; end
 
       def do_call(*args)
-        result = super(*args)
+        super(*args)
         Success(args.first)
       end
     end
