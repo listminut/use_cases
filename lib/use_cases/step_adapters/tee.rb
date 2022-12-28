@@ -9,8 +9,6 @@ module UseCases
 
       def do_call(*args)
         result = super(*args)
-        raise InvalidReturnValue, "For a tee step, a Monad will have no effect." if result.is_a?(Dry::Monads::Result)
-
         Success(args.first)
       end
     end
