@@ -4,6 +4,10 @@ SomeContainer = Class.new
 SomePublisher = Class.new
 
 RSpec.describe UseCases do
+  after do
+    Object.send :remove_const, 'MyCase' if defined?(MyCase)
+  end
+
   it "has a version number" do
     expect(UseCases::VERSION).not_to be nil
   end

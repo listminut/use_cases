@@ -10,18 +10,17 @@ module UseCases
 
       attr_reader :name, :object, :failure, :options
 
-      def initialize(name, *args, **options)
+      def initialize(name, *args)
         @name = name
-        @object = args.first
-        @options = options
+        @object, @options = args
       end
 
       def previous_step_result
         object.stack.prev_step_result
       end
 
-      def call(*args)
-        UseCases::Result.new(self, do_call(*args))
+      def call(...)
+        UseCases::Result.new(self, do_call(...))
       end
 
       def do_call(*initial_args)

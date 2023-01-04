@@ -17,7 +17,7 @@ module UseCases
       end
 
       module CallPatch
-        def call(*args)
+        def call(*)
           unless stack.include_step?(:validate)
             raise NoValidationError,
                   "Make sure to define params validations by using *params*" \
@@ -67,7 +67,7 @@ module UseCases
 
       private
 
-      def validate(params, *_args)
+      def validate(params, *)
         return Failure([:validation_error, "*params* must be a hash."]) unless params.respond_to?(:merge)
 
         validation = contract.call(params)

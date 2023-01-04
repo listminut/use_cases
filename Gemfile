@@ -5,16 +5,15 @@ source "https://rubygems.org"
 # Specify your gem's dependencies in use_cases.gemspec
 gemspec
 
-gem "activesupport"
-gem "dry-events"
-gem "dry-matcher"
-gem "dry-monads"
-gem "dry-validation"
+gem "activesupport", "~> 6.1.7"
+gem "dry-matcher", "~> 0.8.1"
+gem "dry-monads", "~> 1.0.0"
+gem "dry-validation", "~> 1.8.1"
 
 group :development, :test do
-  gem "byebug"
+  gem "pry-byebug"
   gem "rake", "~> 13.0"
-  gem "rspec", "~> 3.0"
-  gem "rubocop", "~> 1.7"
-  gem "simplecov", require: false
+  gem "rspec", "~> 3.12.0"
+  gem "rubocop", "~> 1.41.1"
+  gem "simplecov", "~> 0.22.0", require: false
 end

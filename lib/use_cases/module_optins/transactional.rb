@@ -13,7 +13,7 @@ module UseCases
       end
 
       module DoCallPatch
-        def do_call(*args)
+        def do_call(*)
           unless respond_to?(:transaction_handler)
             raise TransactionHandlerUndefined, "when using *transactional*, make sure to include a transaction handler in your dependencies."
           end

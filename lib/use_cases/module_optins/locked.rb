@@ -26,13 +26,13 @@ module UseCases
       end
 
       module CallPatch
-        def call(*args)
+        def call(...)
           unless self.class._lock_with
             raise MissingLockConfiguration, "Locked use cases require setting `lock_with` to define the cache key and wait configuration.\n" \
                                             " Example: `lock_with { |params, curent_user| \"my-key-\#{params[:id]}-\#{curent_user.id}\" }`"
           end
 
-          key = lock_with(*args)
+          key = lock_with(...)
 
           raise MissingLockerError, "Locked use cases require setting `locker` dependency to define the cache store.\n" unless respond_to?(:locker)
 
@@ -45,8 +45,8 @@ module UseCases
           self.class._lock_options
         end
 
-        def lock_with(*args)
-          self.class._lock_with.is_a?(Proc) ? self.class._lock_with.call(*args) : self.class._lock_with
+        def lock_with(...)
+          self.class._lock_with.is_a?(Proc) ? self.class._lock_with.call(...) : self.class._lock_with
         end
       end
     end
