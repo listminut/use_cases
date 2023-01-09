@@ -10,9 +10,19 @@ module UseCases
       @result = result
     end
 
+    def method_missing(method, *args, &block)
+      return result.send(method, *args, &block) if result.respond_to?(method)
+
+      super
+    end
+
+    def respond_to_missing?(method, include_private = false)
+      result.respond_to?(method, include_private) || super
+    end
+
     def value
       return result if result_not_monad?
-      return nil if result_empty?
+      return if result_empty?
 
       result.success? ? result.value! : result.failure
     end
@@ -39,7 +49,7 @@ module UseCases
     end
 
     def to_result
-      self
+      result
     end
 
     def result_empty?
