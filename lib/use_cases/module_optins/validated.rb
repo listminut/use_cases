@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "dry/schema"
 require "dry/validation"
 require "dry/validation/contract"
 
