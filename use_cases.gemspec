@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
   spec.description   = "A DSL to encapsulate your domain logic."
   spec.homepage      = "https://github.com/listminut/use_cases"
   spec.license       = "MIT"
-  spec.required_ruby_version = ">= 3.0.0"
+  spec.required_ruby_version = ">= 2.7.0"
 
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = "https://github.com/listminut/use_cases"
@@ -30,13 +30,13 @@ Gem::Specification.new do |spec|
   # For more information and examples about making a new gem, checkout our
   # guide at: https://bundler.io/guides/creating_gem.html
 
-  spec.add_dependency "activesupport", ">= 6.1.7"
-  spec.add_dependency "dry-matcher", ">= 0.8.1"
-  spec.add_dependency "dry-monads", ">= 1.0.0"
-  spec.add_dependency "dry-validation", ">= 1.8.1"
+  spec.add_dependency "activesupport", "~> 6.1", ">= 6.1.7"
+  spec.add_dependency "dry-matcher", "~> 0.8", ">= 0.8.1"
+  spec.add_dependency "dry-monads", "~> 1.0", ">= 1.0.0"
+  spec.add_dependency "dry-validation", "~> 1.8", ">= 1.8.1"
 
-  spec.add_development_dependency "byebug"
-  spec.add_development_dependency "rake"
-  spec.add_development_dependency "rspec"
-  spec.add_development_dependency "rubocop"
+  spec.add_development_dependency "byebug", "~> 11.1", ">= 11.1.3"
+  spec.add_development_dependency "rake", "~> 13.0", ">= 13.0.1"
+  spec.add_development_dependency "rspec", "~> 3.10", ">= 3.10.0"
+  spec.add_development_dependency "rubocop", "~> 1.18", ">= 1.18.4"
 end
