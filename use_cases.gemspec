@@ -30,7 +30,7 @@ Gem::Specification.new do |spec|
   # For more information and examples about making a new gem, checkout our
   # guide at: https://bundler.io/guides/creating_gem.html
 
-  spec.add_dependency "activesupport", "~> 6.1", ">= 6.1.0"
+  spec.add_dependency "activesupport", ">= 6.1", "< 8.0"
   spec.add_dependency "dry-matcher", "~> 0.8", ">= 0.5.0"
   spec.add_dependency "dry-monads", "~> 1.0", ">= 1.0.0"
   spec.add_dependency "dry-validation", "~> 1.8", ">= 1.8.0"
